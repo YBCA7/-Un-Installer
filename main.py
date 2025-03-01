@@ -30,7 +30,7 @@ def uninst():
     unib.config(state="disabled", text="执行中  Executing…")
     system(path + " uninstall " + e.get())
     insb.config(state="normal")
-    unib.config(state="normal", text="卸载（请在弹出窗口中输Y）  Uninstall")
+    unib.config(state="normal", text="卸载（在弹出窗口中输Y）  Uninstall")
 
 
 def install():
