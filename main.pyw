@@ -13,7 +13,7 @@ r.resizable(False, False)
 Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0)
 e = Entry(width=50)
 e.grid(row=0, column=1)
-Label(text="下载源 Source: ").grid(row=1, column=0)
+Label(text="下载源  Source: ").grid(row=1, column=0)
 src_b = Combobox(width=48)
 src_b.grid(row=1, column=1)
 src_b['state'] = 'readonly'
@@ -29,7 +29,7 @@ path = prefix + "\\Scripts\\pip.exe"
 
 ins_b = Button(text="安装  Install", width=78)
 ins_b.grid(row=2, columnspan=2)
-uni_b = Button(text="卸载（在弹出窗口中输y）  Uninstall", width=78)
+uni_b = Button(text="卸载  Uninstall", width=78)
 uni_b.grid(row=3, columnspan=2)
 
 
