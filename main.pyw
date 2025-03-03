@@ -17,13 +17,13 @@ Label(text="下载源  Source: ").grid(row=1, column=0)
 src_b = Combobox(width=48)
 src_b.grid(row=1, column=1)
 src_b['state'] = 'readonly'
-src_b['values'] = ('清华大学  Tsinghua University', '阿里云  Aliyun', 'PYPI')
+src_b['values'] = ('清华大学  Tsinghua University', '阿里云  Aliyun', 'PyPI')
 src_b.set('清华大学  Tsinghua University')
 
 sources = {
-	'清华大学  Tsinghua University':'https://pypi.tuna.tsinghua.edu.cn/simple',
-	'阿里云  Aliyun':'https://mirrors.aliyun.com/pypi/simple',
-	'PYPI':'https://pypi.org/simple'
+    '清华大学  Tsinghua University':'https://pypi.tuna.tsinghua.edu.cn/simple',
+    '阿里云  Aliyun':'https://mirrors.aliyun.com/pypi/simple',
+    'PyPI':'https://pypi.org/simple'
 }
 path = prefix + "\\Scripts\\pip.exe"
 
