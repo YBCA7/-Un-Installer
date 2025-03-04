@@ -10,16 +10,6 @@ r = Tk()
 r.title('-Un-installer')
 r.resizable(False, False)
 
-Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0, padx=5, pady=5)
-e = Entry(width=50)
-e.grid(row=0, column=1, padx=5, pady=5)
-Label(text="下载源  Source: ").grid(row=1, column=0, padx=5, pady=5)
-src_b = Combobox(width=48)
-src_b.grid(row=1, column=1, padx=5, pady=5)
-src_b['state'] = 'readonly'
-src_b['values'] = ('清华大学  Tsinghua University', '阿里云  Aliyun', 'PyPI')
-src_b.set('清华大学  Tsinghua University')
-
 sources = {
     '清华大学  Tsinghua University':'https://pypi.tuna.tsinghua.edu.cn/simple',
     '阿里云  Aliyun':'https://mirrors.aliyun.com/pypi/simple',
@@ -27,6 +17,16 @@ sources = {
 }
 path = prefix + "\\Scripts\\pip.exe"
 
+Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0, padx=5, pady=5)
+e = Entry(width=50)
+e.grid(row=0, column=1, padx=5, pady=5)
+Label(text="下载源  Source: ").grid(row=1, column=0, padx=5, pady=5)
+src_b = Combobox(width=48)
+src_b.grid(row=1, column=1, padx=5, pady=5)
+src_b['state'] = 'readonly'
+source_names = tuple(sources.keys())
+src_b['values'] = source_names
+src_b.set(source_names[0])
 ins_b = Button(text="安装  Install", width=78)
 ins_b.grid(row=2, columnspan=2, padx=5, pady=5)
 uni_b = Button(text="卸载  Uninstall", width=78)
