@@ -10,12 +10,12 @@ r = Tk()
 r.title('-Un-installer')
 r.resizable(False, False)
 
-Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0)
+Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0, padx=5, pady=5)
 e = Entry(width=50)
-e.grid(row=0, column=1)
-Label(text="下载源  Source: ").grid(row=1, column=0)
+e.grid(row=0, column=1, padx=5, pady=5)
+Label(text="下载源  Source: ").grid(row=1, column=0, padx=5, pady=5)
 src_b = Combobox(width=48)
-src_b.grid(row=1, column=1)
+src_b.grid(row=1, column=1, padx=5, pady=5)
 src_b['state'] = 'readonly'
 src_b['values'] = ('清华大学  Tsinghua University', '阿里云  Aliyun', 'PyPI')
 src_b.set('清华大学  Tsinghua University')
@@ -28,14 +28,18 @@ sources = {
 path = prefix + "\\Scripts\\pip.exe"
 
 ins_b = Button(text="安装  Install", width=78)
-ins_b.grid(row=2, columnspan=2)
+ins_b.grid(row=2, columnspan=2, padx=5, pady=5)
 uni_b = Button(text="卸载  Uninstall", width=78)
-uni_b.grid(row=3, columnspan=2)
+uni_b.grid(row=3, columnspan=2, padx=5, pady=5)
 
 
 def execute(command):
+    """
+    Execute a command and display the output, and capture and display error messages when execution fails.
+    执行一条指令并显示输出，且在执行出错时捕获并显示错误信息。
+    """
     try:
-        showinfo('Result', run(command, capture_output=True, text=True, check=True).stdout)
+        showinfo('Output', run(command, capture_output=True, text=True, check=True).stdout)
     except CalledProcessError as error:
         showerror('Error', error.stderr)
 
