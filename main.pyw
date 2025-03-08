@@ -81,10 +81,12 @@ def show_about_window():
     about_window = Toplevel(r)
     about_window.title("关于  About")
     about_window.resizable(False, False)
-    Label(about_window, text="-Un-installer  Version 5.0", font=("Consolas", 20)).pack(pady=5)
+    Label(about_window, text="-Un-installer", font=("Consolas", 20)).pack(pady=5)
+    Label(about_window, text="Version 5.0").pack(pady=5)
     Button(about_window, text="源代码仓库  Source Code Repository",
-           command=lambda: open("https://github.com/YBCA7/-Un-installer"), width=40).pack(pady=5)
-    Button(about_window, text="关闭  Close", command=lambda: close_about_window(about_window), width=40).pack(pady=5)
+           command=lambda: open("https://github.com/YBCA7/-Un-installer"), width=50).pack(pady=5)
+    Button(about_window, text="关闭  Close",
+           command=lambda: close_about_window(about_window), width=50).pack(pady=5)
     about_window.protocol('WM_DELETE_WINDOW', lambda: close_about_window(about_window))
 
 
@@ -93,7 +95,8 @@ def close_about_window(window):
     window.destroy()
 
 
-Button(text="关于  About", command=show_about_window, width=78).grid(row=4, columnspan=2, padx=5, pady=5)
+Button(text="该软件包详情  Details of the Package", command=lambda: open(f"https://pypi.org/project/{e.get()}/"), width=78).grid(row=4, columnspan=2, padx=5, pady=5)
+Button(text="关于  About", command=show_about_window, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
 ins_b.config(command=install)
 uni_b.config(command=uninstall)
 r.mainloop()
