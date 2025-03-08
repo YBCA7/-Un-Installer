@@ -95,7 +95,9 @@ def close_about_window(window):
     window.destroy()
 
 
-Button(text="该软件包详情  Details of the Package", command=lambda: open(f"https://pypi.org/project/{e.get()}/"), width=78).grid(row=4, columnspan=2, padx=5, pady=5)
+Button(text="该软件包详情  Details of the Package",
+       command=lambda: open(f"https://pypi.org/project/{e.get()}/"),
+       width=78).grid(row=4, columnspan=2, padx=5, pady=5)
 Button(text="关于  About", command=show_about_window, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
 ins_b.config(command=install)
 uni_b.config(command=uninstall)
