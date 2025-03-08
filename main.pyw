@@ -57,34 +57,37 @@ The command has been executed and the exit code is 0.""")
 Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
 
 
+def en_or_disable(status):
+    if status:
+        for button in (ins_b, upd_b, uni_b):
+            button.config(state="disabled")
+    else:
+        for button in (ins_b, upd_b, uni_b):
+            button.config(state="normal")
+
+
 def install():
-    ins_b.config(state="disabled", text="执行中  Executing…")
-    upd_b.config(state="disabled")
-    uni_b.config(state="disabled")
+    ins_b.config(text="执行中  Executing…")
+    en_or_disable(False)
     execute(f"{path} install -i {sources[src_b.get()]} {e.get()}")
-    ins_b.config(state="normal", text="安装  Install")
-    upd_b.config(state="normal")
-    uni_b.config(state="normal")
+    en_or_disable(True)
+    ins_b.config(text="安装  Install")
 
 
 def update():
-    ins_b.config(state="disabled")
-    upd_b.config(state="disabled", text="执行中  Executing…")
-    uni_b.config(state="disabled")
+    upd_b.config(text="执行中  Executing…")
+    en_or_disable(False)
     execute(f"{path} install --upgrade {e.get()}")
-    ins_b.config(state="normal")
-    upd_b.config(state="normal", text="升级  Update")
-    uni_b.config(state="normal")
+    en_or_disable(True)
+    upd_b.config(text="升级  Update")
 
 
 def uninstall():
-    ins_b.config(state="disabled")
-    upd_b.config(state="disabled")
-    uni_b.config(state="disabled", text="执行中  Executing…")
+    en_or_disable(False)
+    uni_b.config(text="执行中  Executing…")
     execute(f"{path} uninstall {e.get()} -y")
-    ins_b.config(state="normal")
-    upd_b.config(state="normal")
-    uni_b.config(state="normal", text="卸载  Uninstall")
+    en_or_disable(True)
+    uni_b.config(text="卸载  Uninstall")
 
 
 def thread_start(function):
