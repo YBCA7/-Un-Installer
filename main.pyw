@@ -57,8 +57,9 @@ The command has been executed and the exit code is 0.""")
         else:
             showerror('错误  Error', """出现了一些错误，很有可能是因为您提前关闭了命令窗口。
 Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
-    for button in (ins_b, upd_b, uni_b):
-        button.config(state="normal")
+    finally:
+        for button in (ins_b, upd_b, uni_b):
+            button.config(state="normal")
 
 
 def install():
