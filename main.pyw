@@ -37,7 +37,9 @@ uni_b.grid(row=4, columnspan=2, padx=5, pady=5)
 
 
 def execute(command):
-    """
+    for button in (ins_b, upd_b, uni_b):
+        button.config(state="disabled")
+        """
     Execute a command and display the output, and capture and display error messages when execution fails.
     执行一条指令并显示输出，且在执行出错时捕获并显示错误信息。
     """
@@ -55,39 +57,26 @@ The command has been executed and the exit code is 0.""")
         else:
             showerror('错误  Error', """出现了一些错误，很有可能是因为您提前关闭了命令窗口。
 Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
-
-
-def en_or_disable(status):
-    if status:
-        for button in (ins_b, upd_b, uni_b):
-            button.config(state="disabled")
-    else:
-        for button in (ins_b, upd_b, uni_b):
-            button.config(state="normal")
+    for button in (ins_b, upd_b, uni_b):
+        button.config(state="normal")
 
 
 def install():
     ins_b.config(text="执行中  Executing…")
-    en_or_disable(False)
     execute(f"{path} install -i {sources[src_b.get()]} {e.get()}")
-    en_or_disable(True)
     ins_b.config(text="安装  Install")
 
 
 def update():
     upd_b.config(text="执行中  Executing…")
-    en_or_disable(False)
     execute(f"{path} install --upgrade {e.get()}")
-    en_or_disable(True)
     upd_b.config(text="升级  Update")
 
 
 def uninstall():
     en_or_disable(False)
-    uni_b.config(text="执行中  Executing…")
     execute(f"{path} uninstall {e.get()} -y")
     en_or_disable(True)
-    uni_b.config(text="卸载  Uninstall")
 
 
 def thread_start(function):
