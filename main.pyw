@@ -74,9 +74,9 @@ def update():
 
 
 def uninstall():
-    en_or_disable(False)
+    uni_b.config(text="执行中  Executing…")
     execute(f"{path} uninstall {e.get()} -y")
-    en_or_disable(True)
+    uni_b.config(text="卸载  Uninstall")
 
 
 def thread_start(function):
