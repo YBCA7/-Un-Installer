@@ -55,7 +55,7 @@ The command has been executed and the exit code is 0.""")
 Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
 
 
-def inst():
+def install():
     ins_b.config(state="disabled", text="执行中  Executing…")
     uni_b.config(state="disabled")
     execute(f"{path} install -i {sources[src_b.get()]} {e.get()}")
@@ -63,7 +63,7 @@ def inst():
     uni_b.config(state="normal")
 
 
-def un_inst():
+def uninstall():
     ins_b.config(state="disabled")
     uni_b.config(state="disabled", text="执行中  Executing…")
     execute(f"{path} uninstall {e.get()} -y")
@@ -71,13 +71,8 @@ def un_inst():
     uni_b.config(state="normal", text="卸载  Uninstall")
 
 
-def install():
-    thread = Thread(target=inst)
-    thread.start()
-
-
-def uninstall():
-    thread = Thread(target=un_inst)
+def thread_start(function):
+    thread = Thread(target=function)
     thread.start()
 
 
@@ -104,6 +99,6 @@ Button(text="该软件包详情  Details of the Package",
        command=lambda: open(f"https://pypi.org/project/{e.get()}/"),
        width=78).grid(row=4, columnspan=2, padx=5, pady=5)
 Button(text="关于  About", command=show_about_window, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
-ins_b.config(command=install)
-uni_b.config(command=uninstall)
+ins_b.config(command=lambda: thread_start(install))
+uni_b.config(command=lambda: thread_start(uninstall))
 r.mainloop()
