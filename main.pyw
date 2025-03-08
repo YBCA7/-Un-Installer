@@ -30,8 +30,10 @@ src_b['values'] = source_names
 src_b.set(source_names[0])
 ins_b = Button(text="安装  Install", width=78)
 ins_b.grid(row=2, columnspan=2, padx=5, pady=5)
+upd_b = Button(text="升级  Update", width=78)
+upd_b.grid(row=3, columnspan=2, padx=5, pady=5)
 uni_b = Button(text="卸载  Uninstall", width=78)
-uni_b.grid(row=3, columnspan=2, padx=5, pady=5)
+uni_b.grid(row=4, columnspan=2, padx=5, pady=5)
 
 
 def execute(command):
@@ -57,17 +59,31 @@ Some errors occurred, which are very likely due to the fact that you closed the 
 
 def install():
     ins_b.config(state="disabled", text="执行中  Executing…")
+    upd_b.config(state="disabled")
     uni_b.config(state="disabled")
     execute(f"{path} install -i {sources[src_b.get()]} {e.get()}")
     ins_b.config(state="normal", text="安装  Install")
+    upd_b.config(state="normal")
+    uni_b.config(state="normal")
+
+
+def update():
+    ins_b.config(state="disabled")
+    upd_b.config(state="disabled", text="执行中  Executing…")
+    uni_b.config(state="disabled")
+    execute(f"{path} install --upgrade {e.get()}")
+    ins_b.config(state="normal")
+    upd_b.config(state="normal", text="升级  Update")
     uni_b.config(state="normal")
 
 
 def uninstall():
     ins_b.config(state="disabled")
+    upd_b.config(state="disabled")
     uni_b.config(state="disabled", text="执行中  Executing…")
     execute(f"{path} uninstall {e.get()} -y")
     ins_b.config(state="normal")
+    upd_b.config(state="normal")
     uni_b.config(state="normal", text="卸载  Uninstall")
 
 
@@ -97,8 +113,8 @@ def close_about_window(window):
 
 Button(text="该软件包详情  Details of the Package",
        command=lambda: open(f"https://pypi.org/project/{e.get()}/"),
-       width=78).grid(row=4, columnspan=2, padx=5, pady=5)
-Button(text="关于  About", command=show_about_window, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
+       width=78).grid(row=5, columnspan=2, padx=5, pady=5)
+Button(text="关于  About", command=show_about_window, width=78).grid(row=6, columnspan=2, padx=5, pady=5)
 ins_b.config(command=lambda: thread_start(install))
 uni_b.config(command=lambda: thread_start(uninstall))
 r.mainloop()
