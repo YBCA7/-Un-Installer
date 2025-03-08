@@ -37,12 +37,12 @@ uni_b.grid(row=4, columnspan=2, padx=5, pady=5)
 
 
 def execute(command):
-    for button in (ins_b, upd_b, uni_b):
-        button.config(state="disabled")
-        """
+    """
     Execute a command and display the output, and capture and display error messages when execution fails.
     执行一条指令并显示输出，且在执行出错时捕获并显示错误信息。
     """
+    for button in (ins_b, upd_b, uni_b):
+        button.config(state="disabled")
     try:
         output = run(command, capture_output=True, text=True, check=True).stdout
         if output:
