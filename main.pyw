@@ -1,9 +1,10 @@
-from tkinter import Tk
+from tkinter import Tk, Toplevel
 from tkinter.ttk import Label, Button, Entry, Combobox
 from tkinter.messagebox import showinfo, showerror
 from subprocess import run, CalledProcessError
 from sys import prefix
 from threading import Thread
+from webbrowser import open
 
 
 r = Tk()
@@ -11,9 +12,9 @@ r.title('-Un-installer')
 r.resizable(False, False)
 
 sources = {
-    '清华大学  Tsinghua University':'https://pypi.tuna.tsinghua.edu.cn/simple',
     '阿里云  Aliyun':'https://mirrors.aliyun.com/pypi/simple',
-    'PyPI':'https://pypi.org/simple'
+    'PyPI':'https://pypi.org/simple',
+    '清华大学  Tsinghua University':'https://pypi.tuna.tsinghua.edu.cn/simple'
 }
 path = prefix + "\\Scripts\\pip.exe"
 
@@ -39,9 +40,14 @@ def execute(command):
     执行一条指令并显示输出，且在执行出错时捕获并显示错误信息。
     """
     try:
-        showinfo('Output', run(command, capture_output=True, text=True, check=True).stdout)
+        showinfo('输出  Output', run(command, capture_output=True, text=True, check=True).stdout)
     except CalledProcessError as error:
-        showerror('Error', error.stderr)
+        err = error.stderr
+        if err:
+            showerror('错误  Error', error.stderr)
+        else:
+            showerror('错误  Error', """出现了一些错误，很有可能是因为您提前关闭了命令窗口。
+Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
 
 
 def inst():
@@ -70,6 +76,24 @@ def uninstall():
     thread.start()
 
 
+def show_about_window():
+    r.attributes('-disabled', True)
+    about_window = Toplevel(r)
+    about_window.title("关于  About")
+    about_window.resizable(False, False)
+    Label(about_window, text="-Un-installer  Version 5.0", font=("Consolas", 20)).pack(pady=5)
+    Button(about_window, text="源代码仓库  Source Code Repository",
+           command=lambda: open("https://github.com/YBCA7/-Un-installer"), width=40).pack(pady=5)
+    Button(about_window, text="关闭  Close", command=lambda: close_about_window(about_window), width=40).pack(pady=5)
+    about_window.protocol('WM_DELETE_WINDOW', lambda: close_about_window(about_window))
+
+
+def close_about_window(window):
+    r.attributes('-disabled', False)
+    window.destroy()
+
+
+Button(text="关于  About", command=show_about_window, width=78).grid(row=4, columnspan=2, padx=5, pady=5)
 ins_b.config(command=install)
 uni_b.config(command=uninstall)
 r.mainloop()
