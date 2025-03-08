@@ -40,7 +40,12 @@ def execute(command):
     执行一条指令并显示输出，且在执行出错时捕获并显示错误信息。
     """
     try:
-        showinfo('输出  Output', run(command, capture_output=True, text=True, check=True).stdout)
+        output = run(command, capture_output=True, text=True, check=True).stdout
+        if output:
+            showinfo('输出  Output', output)
+        else:
+            showinfo('输出  Output', """命令已执行完毕，退出代码为0。
+The command has been executed and the exit code is 0.""")
     except CalledProcessError as error:
         err = error.stderr
         if err:
