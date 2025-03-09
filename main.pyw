@@ -70,7 +70,7 @@ def install():
 
 def update():
     upd_b.config(text="执行中  Executing…")
-    execute(f"{path} install --upgrade {e.get()}")
+    execute(f"{path} install --upgrade {e.get()} -i {sources[src_b.get()]}")
     upd_b.config(text="升级  Update")
 
 
