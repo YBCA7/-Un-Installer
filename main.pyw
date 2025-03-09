@@ -106,6 +106,6 @@ Some errors occurred, which are very likely due to the fact that you closed the 
 
 
 if __name__ == "__main__":
-    main_window = Tk()  # 将 root 改为更具描述性的名称
+    main_window = Tk()
     app = Un_Installer_App(main_window)
     main_window.mainloop()
