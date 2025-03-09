@@ -95,7 +95,7 @@ def show_about_window():
     Button(about_window, text="源代码仓库  Source Code Repository",
            command=lambda: open("https://github.com/YBCA7/-Un-installer"), width=50).pack(pady=5)
     Button(about_window, text="关闭  Close",
-           command=lambda: about_window.destroy, width=50).pack(pady=5)
+           command=about_window.destroy, width=50).pack(pady=5)
 
 
 Button(text="该软件包详情  Details of the Package",
