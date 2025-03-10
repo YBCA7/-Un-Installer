@@ -2,7 +2,7 @@ from tkinter import Tk, Toplevel
 from tkinter.ttk import Label, Button, Entry, Combobox
 from tkinter.messagebox import showinfo, showerror
 from subprocess import run, CalledProcessError
-from sys import prefix
+from sys import executable
 from threading import Thread
 import webbrowser
 
@@ -18,7 +18,7 @@ class Un_Installer_App:
             'PyPI': 'https://pypi.org/simple',
             '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
         }
-        self.path = prefix + "\\Scripts\\pip.exe"
+        self.pip_command_prefix = [executable, "-m", "pip"]
 
         self.create_widgets()
         self.setup_buttons()
@@ -46,7 +46,8 @@ class Un_Installer_App:
 
         Button(text="该软件包详情  Details of the Package",
                command=self.show_package_details, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
-        Button(text="关于  About", command=self.show_about_window, width=78).grid(row=6, columnspan=2, padx=5, pady=5)
+        Button(text="关于  About", 
+               command=self.show_about_window, width=78).grid(row=6, columnspan=2, padx=5, pady=5)
 
     def setup_buttons(self):
         self.install_button.config(command=lambda: Thread(target=self.install).start())
@@ -76,17 +77,23 @@ Some errors occurred, which are very likely due to the fact that you closed the 
 
     def install(self):
         self.install_button.config(text="执行中  Executing…")
-        self.execute(f"{self.path} install -i {self.sources[self.source_combobox.get()]} {self.entry.get()}")
+        self.execute(self.pip_command_prefix + [
+            "install", "-i", self.sources[self.source_combobox.get()], self.entry.get()
+        ])
         self.install_button.config(text="安装  Install")
 
     def update(self):
         self.update_button.config(text="执行中  Executing…")
-        self.execute(f"{self.path} install --upgrade {self.entry.get()} -i {self.sources[self.source_combobox.get()]}")
+        self.execute(
+            self.pip_command_prefix + [
+                "install", "--upgrade", self.entry.get(), "-i", self.sources[self.source_combobox.get()]
+            ]
+        )
         self.update_button.config(text="升级  Update")
 
     def uninstall(self):
         self.uninstall_button.config(text="执行中  Executing…")
-        self.execute(f"{self.path} uninstall {self.entry.get()} -y")
+        self.execute(self.pip_command_prefix + ["uninstall", self.entry.get(), "-y"])
         self.uninstall_button.config(text="卸载  Uninstall")
 
     def show_about_window(self):
