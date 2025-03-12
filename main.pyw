@@ -21,7 +21,7 @@ class App:
         self.pip_command_prefix = [executable, "-m", "pip"]
 
         self.uninstall_button = Button(text="卸载  Uninstall", width=78)
-        self.update_button = Button(text="升级  Update", width=78)
+        self.update_button = Button(text="升级  Upgrade", width=78)
         self.install_button = Button(text="安装  Install", width=78)
         self.entry = Entry(width=50)
         self.source_combobox = Combobox(width=48)
@@ -96,6 +96,7 @@ Some errors occurred, which are very likely due to the fact that you closed the 
     def show_about_window(self):
         about_window = Toplevel(self.main_window)
         about_window.grab_set()
+        about_window.focus_set()
         about_window.title("关于  About")
         about_window.resizable(False, False)
         Label(about_window, text="-Un-Installer", font=("Consolas", 20)).pack(padx=5, pady=5)
