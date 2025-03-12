@@ -86,7 +86,7 @@ Some errors occurred, which are very likely due to the fact that you closed the 
                 "install", "--upgrade", self.entry.get(), "-i", self.sources[self.source_combobox.get()]
             ]
         )
-        self.update_button.config(text="升级  Update")
+        self.update_button.config(text="升级  Upgrade")
 
     def uninstall(self):
         self.uninstall_button.config(text="执行中  Executing…")
