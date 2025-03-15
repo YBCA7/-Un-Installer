@@ -1,5 +1,8 @@
 # -Un-Installer
 
+![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)
+![License](https://img.shields.io/badge/License-Apache--2.0-green)
+
 一个基于 `Tkinter` 的 **Python包管理图形界面工具**，提供便捷的 `安装` / `升级` / `卸载` 操作，支持多镜像源选择。
 
 A Tkinter-based GUI tool for Python package management with multi-source support.
