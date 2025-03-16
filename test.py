@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from tkinter import Tk
 from tkinter.ttk import Button
 from subprocess import CalledProcessError
-from .main import App
+from main import App
 
 class TestAppExecute(unittest.TestCase):
     def setUp(self):
