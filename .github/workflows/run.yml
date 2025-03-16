@@ -2,8 +2,6 @@ name: Run on push
 
 on:
   push:
-    paths:
-      - 'main.pyw'
 
 jobs:
   run-main-pyw:
