@@ -65,19 +65,21 @@ After the command starts executing, the output will be displayed here.""")
             button.config(state="disabled")
         self.output_text.delete(1.0, 'end')
 
-        def read_output(current_process):
+        def show_output(current_process):
             while True:
                 output = current_process.stdout.readline()
                 if output == '' and current_process.poll() is not None:
                     break
                 if output:
+                    self.output_text.config(state="normal")
                     self.output_text.insert('end', output)
                     self.output_text.see('end')
+                    self.output_text.config(state="disabled")
             current_process.stdout.close()
 
         try:
             process = Popen(command, stdout=PIPE, stderr=PIPE, text=True, bufsize=1, universal_newlines=True)
-            Thread(target=read_output, args=(process,), daemon=True).start()
+            Thread(target=show_output, args=(process,), daemon=True).start()
             process.wait()
             if process.returncode != 0:
                 err = process.stderr.read()
