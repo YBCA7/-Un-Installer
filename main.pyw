@@ -1,7 +1,7 @@
-from tkinter import Tk, Toplevel
+from tkinter import Tk, Toplevel, Text, Scrollbar
 from tkinter.ttk import Label, Button, Entry, Combobox
-from tkinter.messagebox import showinfo, showerror
-from subprocess import run, CalledProcessError
+from tkinter.messagebox import showerror
+from subprocess import Popen, PIPE
 from sys import executable
 from threading import Thread
 import webbrowser
@@ -20,20 +20,24 @@ class App:
         }
         self.pip_command_prefix = [executable, "-m", "pip"]
 
-        self.uninstall_button = Button(text="卸载  Uninstall", width=78)
-        self.update_button = Button(text="升级  Upgrade", width=78)
-        self.install_button = Button(text="安装  Install", width=78)
-        self.entry = Entry(width=50)
-        self.source_combobox = Combobox(width=48)
+        self.uninstall_button = Button(text="卸载  Uninstall", width=79)
+        self.update_button = Button(text="升级  Upgrade", width=79)
+        self.install_button = Button(text="安装  Install", width=79)
+        self.entry = Entry(width=40)
+        self.source_combobox = Combobox(width=37)
+        self.output_text = Text(width=62, height=10, font="Consolas")
+        self.scrollbar = Scrollbar(command=self.output_text.yview)
+        self.output_text.config(yscrollcommand=self.scrollbar.set)
 
+        self.buttons = (self.install_button, self.update_button, self.uninstall_button)
         self.setup_widgets()
 
     def setup_widgets(self):
-        Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0, padx=5, pady=5)
-        self.entry.grid(row=0, column=1, padx=5, pady=5)
-        Label(text="下载源  Source: ").grid(row=1, column=0, padx=5, pady=5)
+        Label(text="需要装卸的包  Name of Package: ").grid(row=0, column=0, pady=5)
+        self.entry.grid(row=0, column=1, padx=5, pady=5, columnspan=2)
+        Label(text="下载源  Source: ").grid(row=1, column=0, pady=5)
 
-        self.source_combobox.grid(row=1, column=1, padx=5, pady=5)
+        self.source_combobox.grid(row=1, column=1, pady=5, columnspan=2)
         self.source_combobox['state'] = 'readonly'
         self.source_combobox['values'] = tuple(self.sources.keys())
         self.source_combobox.set(tuple(self.sources.keys())[0])
@@ -42,34 +46,51 @@ class App:
         self.update_button.config(command=lambda: Thread(target=self.upgrade).start())
         self.uninstall_button.config(command=lambda: Thread(target=self.uninstall).start())
 
-        self.install_button.grid(row=2, columnspan=2, padx=5, pady=5)
-        self.update_button.grid(row=3, columnspan=2, padx=5, pady=5)
-        self.uninstall_button.grid(row=4, columnspan=2, padx=5, pady=5)
+        self.install_button.grid(row=2, columnspan=3, pady=5)
+        self.update_button.grid(row=3, columnspan=3, pady=5)
+        self.uninstall_button.grid(row=4, columnspan=3, pady=5)
 
         Button(text="该软件包详情  Details of the Package",
-               command=self.show_package_details, width=78).grid(row=5, columnspan=2, padx=5, pady=5)
-        Button(text="关于  About", 
-               command=self.show_about_window, width=78).grid(row=6, columnspan=2, padx=5, pady=5)
+               command=self.show_package_details, width=79).grid(row=5, columnspan=3, pady=5)
+        Button(text="关于  About",
+               command=self.show_about_window, width=79).grid(row=6, columnspan=3, pady=5)
+
+        self.output_text.insert('end', """开始执行命令后，这里将显示输出。
+After the command starts executing, the output will be displayed here.""")
+        self.output_text.grid(row=7, columnspan=2)
+        self.scrollbar.grid(row=7, column=2, sticky='ns')
 
     def execute(self, command):
-        for button in (self.install_button, self.update_button, self.uninstall_button):
+        for button in self.buttons:
             button.config(state="disabled")
+        self.output_text.delete(1.0, 'end')
+
+        def read_output(current_process):
+            while True:
+                output = current_process.stdout.readline()
+                if output == '' and current_process.poll() is not None:
+                    break
+                if output:
+                    self.output_text.insert('end', output)
+                    self.output_text.see('end')
+            current_process.stdout.close()
+
         try:
-            output = run(command, capture_output=True, text=True, check=True).stdout
-            if output:
-                showinfo('输出  Output', output)
-            else:
-                showinfo('输出  Output', """命令已执行完毕，退出代码为0。
-The command has been executed and the exit code is 0.""")
-        except CalledProcessError as error:
-            err = error.stderr
-            if err:
-                showerror('错误  Error', error.stderr)
-            else:
-                showerror('错误  Error', """出现了一些错误，很有可能是因为您提前关闭了命令窗口。
-Some errors occurred, which are very likely due to the fact that you closed the command window prematurely.""")
+            process = Popen(command, stdout=PIPE, stderr=PIPE, text=True, bufsize=1, universal_newlines=True)
+            Thread(target=read_output, args=(process,), daemon=True).start()
+            process.wait()
+            if process.returncode != 0:
+                err = process.stderr.read()
+                if err:
+                    self.output_text.insert('end', err)
+                    self.output_text.see('end')
+                    showerror('错误  Error', err)
+        except Exception as e:
+            self.output_text.insert('end', f"出现了一些错误  There were some errors: {str(e)}\n")
+            self.output_text.see('end')
+            showerror('错误  Error', f"出现了一些错误  There were some errors: {str(e)}")
         finally:
-            for button in (self.install_button, self.update_button, self.uninstall_button):
+            for button in self.buttons:
                 button.config(state="normal")
 
     def install(self):
@@ -100,7 +121,7 @@ Some errors occurred, which are very likely due to the fact that you closed the 
         about_window.title("关于  About")
         about_window.resizable(False, False)
         Label(about_window, text="-Un-Installer", font=("Consolas", 20)).pack(padx=5, pady=5)
-        Label(about_window, text="Version 6.1").pack(padx=5, pady=5)
+        Label(about_window, text="Version 6.2").pack(padx=5, pady=5)
         Button(about_window, text="源代码仓库  Source Code Repository",
                command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"), width=50).pack(padx=5, pady=5)
         Button(about_window, text="关闭  Close",
