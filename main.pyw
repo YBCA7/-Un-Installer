@@ -8,16 +8,16 @@ import webbrowser
 
 
 class App:
+    self.SOURCES = {
+        '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
+        'PyPI': 'https://pypi.org/simple',
+        '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
+    }
     def __init__(self, window):
         self.main_window = window
         self.main_window.title('-Un-Installer')
         self.main_window.resizable(False, False)
 
-        self.sources = {
-            '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
-            'PyPI': 'https://pypi.org/simple',
-            '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
-        }
         self.pip_command_prefix = [executable, "-m", "pip"]
 
         self.buttons = {
