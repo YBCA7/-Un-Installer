@@ -7,7 +7,7 @@ from threading import Thread
 import webbrowser
 
 
-SOURCES = {
+SOURCES: dict = {
     '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
     'PyPI': 'https://pypi.org/simple',
     '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
@@ -23,9 +23,9 @@ class App:
         self.pip_command_prefix = [executable, "-m", "pip"]
 
         self.buttons = {
-            "install":Button(text="安装  Install", width=79),
-            "upgrade":Button(text="升级  Upgrade", width=79),
-            "uninstall":Button(text="卸载  Uninstall", width=79)
+            "install": Button(text="安装  Install", width=79),
+            "upgrade": Button(text="升级  Upgrade", width=79),
+            "uninstall": Button(text="卸载  Uninstall", width=79)
         }
         self.entry = Entry(width=40)
         self.source_combobox = Combobox(width=37)
