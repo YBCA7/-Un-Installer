@@ -7,13 +7,14 @@ from threading import Thread
 import webbrowser
 
 
+SOURCES = {
+    '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
+    'PyPI': 'https://pypi.org/simple',
+    '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
+}
+
+
 class App:
-    SOURCES = {
-        '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
-        'PyPI': 'https://pypi.org/simple',
-        '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
-    }
-    
     def __init__(self, window):
         self.main_window = window
         self.main_window.title('-Un-Installer')
@@ -80,16 +81,16 @@ After the command starts executing, the output will be displayed here.""")
             current_process.stdout.close()
 
         try:
-            process = Popen(command, stdout=PIPE, stderr=PIPE,
-                            text=True, bufsize=1, universal_newlines=True)
-            Thread(target=show_output, args=(process,), daemon=True).start()
-            process.wait()
-            if process.returncode != 0:
-                err = process.stderr.read()
-                if err:
-                    self.output_text.insert('end', err)
-                    self.output_text.see('end')
-                    showerror('错误  Error', err)
+            with Popen(command, stdout=PIPE, stderr=PIPE, text=True,
+                       bufsize=1, universal_newlines=True) as process:
+                Thread(target=show_output, args=(process,), daemon=True).start()
+                process.wait()
+                if process.returncode != 0:
+                    err = process.stderr.read()
+                    if err:
+                        self.output_text.insert('end', err)
+                        self.output_text.see('end')
+                        showerror('错误  Error', err)
         except Exception as e:
             self.output_text.insert('end', f"出现了一些错误  There were some errors: {str(e)}\n")
             self.output_text.see('end')
