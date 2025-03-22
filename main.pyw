@@ -8,11 +8,12 @@ import webbrowser
 
 
 class App:
-    self.SOURCES = {
+    SOURCES = {
         '阿里云  Aliyun': 'https://mirrors.aliyun.com/pypi/simple',
         'PyPI': 'https://pypi.org/simple',
         '清华大学  Tsinghua University': 'https://pypi.tuna.tsinghua.edu.cn/simple'
     }
+    
     def __init__(self, window):
         self.main_window = window
         self.main_window.title('-Un-Installer')
@@ -40,8 +41,8 @@ class App:
 
         self.source_combobox.grid(row=1, column=1, pady=5, columnspan=2)
         self.source_combobox['state'] = 'readonly'
-        self.source_combobox['values'] = tuple(self.sources.keys())
-        self.source_combobox.set(tuple(self.sources.keys())[0])
+        self.source_combobox['values'] = tuple(SOURCES.keys())
+        self.source_combobox.set(tuple(SOURCES.keys())[0])
 
         self.buttons["install"].config(command=lambda: Thread(target=self.install).start())
         self.buttons["upgrade"].config(command=lambda: Thread(target=self.upgrade).start())
@@ -100,7 +101,7 @@ After the command starts executing, the output will be displayed here.""")
     def install(self):
         self.buttons["install"].config(text="执行中  Executing…")
         self.execute(self.pip_command_prefix + [
-            "install", "-i", self.sources[self.source_combobox.get()], self.entry.get()
+            "install", "-i", SOURCES[self.source_combobox.get()], self.entry.get()
         ])
         self.buttons["install"].config(text="安装  Install")
 
@@ -109,7 +110,7 @@ After the command starts executing, the output will be displayed here.""")
         self.execute(
             self.pip_command_prefix + [
                 "install", "--upgrade", self.entry.get(), "-i",
-                self.sources[self.source_combobox.get()]
+                SOURCES[self.source_combobox.get()]
             ]
         )
         self.buttons["upgrade"].config(text="升级  Upgrade")
