@@ -98,26 +98,26 @@ After the command starts executing, the output will be displayed here.""")
                 button.config(state="normal")
 
     def install(self):
-        self.install_button.config(text="执行中  Executing…")
+        self.buttons["install"].config(text="执行中  Executing…")
         self.execute(self.pip_command_prefix + [
             "install", "-i", self.sources[self.source_combobox.get()], self.entry.get()
         ])
-        self.install_button.config(text="安装  Install")
+        self.buttons["install"].config(text="安装  Install")
 
     def upgrade(self):
-        self.update_button.config(text="执行中  Executing…")
+        self.buttons["upgrade"].config(text="执行中  Executing…")
         self.execute(
             self.pip_command_prefix + [
                 "install", "--upgrade", self.entry.get(), "-i",
                 self.sources[self.source_combobox.get()]
             ]
         )
-        self.update_button.config(text="升级  Upgrade")
+        self.buttons["upgrade"].config(text="升级  Upgrade")
 
     def uninstall(self):
-        self.uninstall_button.config(text="执行中  Executing…")
+        self.buttons["uninstall"].config(text="执行中  Executing…")
         self.execute(self.pip_command_prefix + ["uninstall", self.entry.get(), "-y"])
-        self.uninstall_button.config(text="卸载  Uninstall")
+        self.buttons["uninstall"].config(text="卸载  Uninstall")
 
     def show_about_window(self):
         about_window = Toplevel(self.main_window)
