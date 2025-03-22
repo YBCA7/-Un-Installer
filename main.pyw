@@ -20,16 +20,17 @@ class App:
         }
         self.pip_command_prefix = [executable, "-m", "pip"]
 
-        self.uninstall_button = Button(text="卸载  Uninstall", width=79)
-        self.update_button = Button(text="升级  Upgrade", width=79)
-        self.install_button = Button(text="安装  Install", width=79)
+        self.buttons = {
+            "install":Button(text="安装  Install", width=79),
+            "upgrade":Button(text="升级  Upgrade", width=79),
+            "uninstall":Button(text="卸载  Uninstall", width=79)
+        }
         self.entry = Entry(width=40)
         self.source_combobox = Combobox(width=37)
         self.output_text = Text(width=62, height=10, font="Consolas")
         self.scrollbar = Scrollbar(command=self.output_text.yview)
         self.output_text.config(yscrollcommand=self.scrollbar.set)
 
-        self.buttons = (self.install_button, self.update_button, self.uninstall_button)
         self.setup_widgets()
 
     def setup_widgets(self):
@@ -42,13 +43,13 @@ class App:
         self.source_combobox['values'] = tuple(self.sources.keys())
         self.source_combobox.set(tuple(self.sources.keys())[0])
 
-        self.install_button.config(command=lambda: Thread(target=self.install).start())
-        self.update_button.config(command=lambda: Thread(target=self.upgrade).start())
-        self.uninstall_button.config(command=lambda: Thread(target=self.uninstall).start())
+        self.buttons["install"].config(command=lambda: Thread(target=self.install).start())
+        self.buttons["upgrade"].config(command=lambda: Thread(target=self.upgrade).start())
+        self.buttons["uninstall"].config(command=lambda: Thread(target=self.uninstall).start())
 
-        self.install_button.grid(row=2, columnspan=3, pady=5)
-        self.update_button.grid(row=3, columnspan=3, pady=5)
-        self.uninstall_button.grid(row=4, columnspan=3, pady=5)
+        self.buttons["install"].grid(row=2, columnspan=3, pady=5)
+        self.buttons["upgrade"].grid(row=3, columnspan=3, pady=5)
+        self.buttons["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text="该软件包详情  Details of the Package",
                command=self.show_package_details, width=79).grid(row=5, columnspan=3, pady=5)
@@ -78,7 +79,8 @@ After the command starts executing, the output will be displayed here.""")
             current_process.stdout.close()
 
         try:
-            process = Popen(command, stdout=PIPE, stderr=PIPE, text=True, bufsize=1, universal_newlines=True)
+            process = Popen(command, stdout=PIPE, stderr=PIPE,
+                            text=True, bufsize=1, universal_newlines=True)
             Thread(target=show_output, args=(process,), daemon=True).start()
             process.wait()
             if process.returncode != 0:
@@ -106,7 +108,8 @@ After the command starts executing, the output will be displayed here.""")
         self.update_button.config(text="执行中  Executing…")
         self.execute(
             self.pip_command_prefix + [
-                "install", "--upgrade", self.entry.get(), "-i", self.sources[self.source_combobox.get()]
+                "install", "--upgrade", self.entry.get(), "-i",
+                self.sources[self.source_combobox.get()]
             ]
         )
         self.update_button.config(text="升级  Upgrade")
@@ -125,7 +128,8 @@ After the command starts executing, the output will be displayed here.""")
         Label(about_window, text="-Un-Installer", font=("Consolas", 20)).pack(padx=5, pady=5)
         Label(about_window, text="Version 6.2").pack(padx=5, pady=5)
         Button(about_window, text="源代码仓库  Source Code Repository",
-               command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"), width=50).pack(padx=5, pady=5)
+               command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"),
+               width=50).pack(padx=5, pady=5)
         Button(about_window, text="关闭  Close",
                command=about_window.destroy, width=50).pack(padx=5, pady=5)
 
