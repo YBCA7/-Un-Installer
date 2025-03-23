@@ -29,7 +29,7 @@ class App:
         }
         self.entry = Entry(width=40)
         self.source_combobox = Combobox(width=37)
-        self.output_text = Text(width=62, height=10, font="Consolas")
+        self.output_text = Text(width=62, height=10, font=("Consolas", 10))
         self.scrollbar = Scrollbar(command=self.output_text.yview)
         self.output_text.config(yscrollcommand=self.scrollbar.set)
 
