@@ -63,6 +63,12 @@ After the command starts executing, the output will be displayed here.""")
         self.output_text.grid(row=7, columnspan=2)
         self.scrollbar.grid(row=7, column=2, sticky='ns')
 
+    def show(self, text):
+        self.output_text.config(state="normal")
+        self.output_text.insert('end', text)
+        self.output_text.see('end')
+        self.output_text.config(state="disabled")
+
     def execute(self, command):
         for button in self.buttons:
             button.config(state="disabled")
@@ -74,10 +80,7 @@ After the command starts executing, the output will be displayed here.""")
                 if output == '' and current_process.poll() is not None:
                     break
                 if output:
-                    self.output_text.config(state="normal")
-                    self.output_text.insert('end', output)
-                    self.output_text.see('end')
-                    self.output_text.config(state="disabled")
+                    self.show(output)
             current_process.stdout.close()
 
         try:
@@ -88,12 +91,10 @@ After the command starts executing, the output will be displayed here.""")
                 if process.returncode != 0:
                     err = process.stderr.read()
                     if err:
-                        self.output_text.insert('end', err)
-                        self.output_text.see('end')
+                        self.show(err)
                         showerror('错误  Error', err)
         except Exception as e:
-            self.output_text.insert('end', f"出现了一些错误  There were some errors: {str(e)}\n")
-            self.output_text.see('end')
+            self.show(f"出现了一些错误  There were some errors: {str(e)}\n")
             showerror('错误  Error', f"出现了一些错误  There were some errors: {str(e)}")
         finally:
             for button in self.buttons:
