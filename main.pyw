@@ -129,7 +129,7 @@ After the command starts executing, the output will be displayed here.""")
         about_window.title("关于  About")
         about_window.resizable(False, False)
         Label(about_window, text="-Un-Installer", font=("Consolas", 20)).pack(padx=5, pady=5)
-        Label(about_window, text="Version 6.2").pack(padx=5, pady=5)
+        Label(about_window, text="Version 6.3").pack(padx=5, pady=5)
         Button(about_window, text="源代码仓库  Source Code Repository",
                command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"),
                width=50).pack(padx=5, pady=5)
