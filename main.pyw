@@ -70,7 +70,7 @@ After the command starts executing, the output will be displayed here.""")
         self.output_text.config(state="disabled")
 
     def execute(self, command):
-        for button in self.buttons:
+        for button in self.buttons.values():
             button.config(state="disabled")
         self.output_text.delete(1.0, 'end')
 
@@ -97,7 +97,7 @@ After the command starts executing, the output will be displayed here.""")
             self.show(f"出现了一些错误  There were some errors: {str(e)}\n")
             showerror('错误  Error', f"出现了一些错误  There were some errors: {str(e)}")
         finally:
-            for button in self.buttons:
+            for button in self.buttons.values():
                 button.config(state="normal")
 
     def install(self):
