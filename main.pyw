@@ -54,11 +54,12 @@ class App:
         self.buttons["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text="该软件包详情  Details of the Package",
-               command=self.show_package_details, width=79).grid(row=5, columnspan=3, pady=5)
+               command=lambda: webbrowser.open(f"https://pypi.org/project/{self.entry.get()}/"),
+               width=79).grid(row=5, columnspan=3, pady=5)
         Button(text="关于  About",
                command=self.show_about_window, width=79).grid(row=6, columnspan=3, pady=5)
 
-        self.output_text.insert('end', """开始执行命令后，这里将显示输出。
+        self.show("""开始执行命令后，这里将显示输出。
 After the command starts executing, the output will be displayed here.""")
         self.output_text.grid(row=7, columnspan=2)
         self.scrollbar.grid(row=7, column=2, sticky='ns')
@@ -72,9 +73,11 @@ After the command starts executing, the output will be displayed here.""")
     def execute(self, command):
         for button in self.buttons.values():
             button.config(state="disabled")
+        self.output_text.config(state="normal")
         self.output_text.delete(1.0, 'end')
+        self.output_text.config(state="disabled")
 
-        def show_output(current_process):
+        def catch_and_show_output(current_process):
             while True:
                 output = current_process.stdout.readline()
                 if output == '' and current_process.poll() is not None:
@@ -86,7 +89,7 @@ After the command starts executing, the output will be displayed here.""")
         try:
             with Popen(command, stdout=PIPE, stderr=PIPE, text=True,
                        bufsize=1, universal_newlines=True) as process:
-                Thread(target=show_output, args=(process,), daemon=True).start()
+                Thread(target=catch_and_show_output, args=(process,), daemon=True).start()
                 process.wait()
                 if process.returncode != 0:
                     err = process.stderr.read()
@@ -135,9 +138,6 @@ After the command starts executing, the output will be displayed here.""")
                width=50).pack(padx=5, pady=5)
         Button(about_window, text="关闭  Close",
                command=about_window.destroy, width=50).pack(padx=5, pady=5)
-
-    def show_package_details(self):
-        webbrowser.open(f"https://pypi.org/project/{self.entry.get()}/")
 
 
 if __name__ == "__main__":
