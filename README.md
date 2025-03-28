@@ -2,6 +2,8 @@
 
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green)
+![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
+![Version](https://img.shields.io/badge/Version-6.3-lightgrey)
 
 一个基于 `Tkinter` 的 **Python包管理图形界面工具**，提供便捷的 `安装` / `升级` / `卸载` 操作，支持多镜像源选择。
 
@@ -19,6 +21,12 @@ A Tkinter-based GUI tool for Python package management with multi-source support
   Multi-threaded execution to prevent UI freezing
 - 🎯 中英双语界面  
   Bilingual interface (Chinese and English)
+- 📜 实时命令输出显示  
+  Real-time command output display
+- 🔒 执行期间按钮禁用防止误操作  
+  Disable buttons during execution to prevent misoperation
+- 🖥️ 控制台风格输出显示  
+  Console-style output display with monospace font
 
 ## 安装要求 Requirements
 
@@ -27,9 +35,11 @@ A Tkinter-based GUI tool for Python package management with multi-source support
   Tkinter (usually included in Python standard library)
 - 以下Python标准库：  
   The following Python standard libraries:
-  - subprocess
-  - threading
-  - webbrowser
+  - `subprocess`
+  - `threading`
+  - `webbrowser`
+  - `tkinter`
+  - `tkinter.ttk`
 
 ## 使用方法 Usage
 
@@ -50,35 +60,58 @@ A Tkinter-based GUI tool for Python package management with multi-source support
    - **关于 About**：查看版本信息和源代码  
      View version information and source code
 
+4. 在下方输出框查看实时执行结果  
+   View real-time execution results in the output box below
+
 ## 技术细节 Technical
 
-- 使用 `subprocess` 模块调用系统pip命令  
-  Use the `subprocess` module to call system pip commands
-- 通过 `threading` 实现异步操作  
-  Implement asynchronous operations through `threading`
+- 使用 `subprocess.Popen` 调用系统pip命令  
+  Use `subprocess.Popen` to call system pip commands
+- 通过 `threading.Thread` 实现异步操作  
+  Implement asynchronous operations through `threading.Thread`
 - 自动捕获并显示命令输出  
   Automatically capture and display command output
+- 使用 `Consolas` 等宽字体显示输出  
+  Use monospace font `Consolas` for output display
 - 错误处理机制：  
   Error handling mechanism:
-  - 捕获CalledProcessError  
-    Catch CalledProcessError
+  - 捕获所有异常并显示错误对话框  
+    Catch all exceptions and display error dialog
   - 显示标准错误输出  
     Display standard error output
-  - 防止重复点击  
-    Prevent duplicate clicks
+  - 执行期间禁用所有操作按钮  
+    Disable all operation buttons during execution
+- 使用 `Toplevel` 创建关于窗口  
+  Use `Toplevel` to create about window
+- 使用 `ttk` 现代主题控件  
+  Use modern `ttk` themed widgets
 
 ## 支持的镜像源 Supported Sources
 
-| 名称 Name       | URL                                      |
-|---------------|------------------------------------------|
-| 阿里云 Aliyun    | https://mirrors.aliyun.com/pypi/simple   |
-| PyPI          | https://pypi.org/simple                  |
-| 清华大学 Tsinghua | https://pypi.tuna.tsinghua.edu.cn/simple |
+| 名称 Name                | URL                                      |
+|-------------------------|------------------------------------------|
+| 阿里云 Aliyun             | https://mirrors.aliyun.com/pypi/simple   |
+| PyPI                   | https://pypi.org/simple                  |
+| 清华大学 Tsinghua University | https://pypi.tuna.tsinghua.edu.cn/simple |
+
+## 界面预览 UI Preview
+
+```
+[需要装卸的包 Name of Package] [输入框 Entry]
+[下载源 Source]              [下拉框 Combobox]
+
+[安装 Install 按钮]          [升级 Upgrade 按钮]
+[卸载 Uninstall 按钮]        [包详情 Details 按钮]
+[关于 About 按钮]
+
+[输出文本框 Output Text]
+```
 
 ## 开发贡献 Contributing
 
 欢迎提交 `Issue` 和 `Pull Request`：  
 Welcome to submit `Issue` and `Pull Request`:
+
 1. `Fork` 仓库 `Fork` the repository
 2. 创建特性分支 Create a feature branch 
     ```bash
