@@ -45,9 +45,12 @@ class App:
         self.source_combobox['values'] = tuple(SOURCES.keys())
         self.source_combobox.set(tuple(SOURCES.keys())[0])
 
-        self.buttons["install"].config(command=lambda: Thread(target=self.install).start())
-        self.buttons["upgrade"].config(command=lambda: Thread(target=self.upgrade).start())
-        self.buttons["uninstall"].config(command=lambda: Thread(target=self.uninstall).start())
+        self.buttons["install"].config(command=lambda: Thread(
+            target=self.execute_pip_command, args=("install",)).start())
+        self.buttons["upgrade"].config(command=lambda: Thread(
+            target=self.execute_pip_command, args=("upgrade",)).start())
+        self.buttons["uninstall"].config(command=lambda: Thread(
+            target=self.execute_pip_command, args=("uninstall",)).start())
 
         self.buttons["install"].grid(row=2, columnspan=3, pady=5)
         self.buttons["upgrade"].grid(row=3, columnspan=3, pady=5)
@@ -103,27 +106,22 @@ After the command starts executing, the output will be displayed here.""")
             for button in self.buttons.values():
                 button.config(state="normal")
 
-    def install(self):
-        self.buttons["install"].config(text="执行中  Executing…")
-        self.execute(self.pip_command_prefix + [
+    def execute_pip_command(self, command):
+        self.buttons[command].config(text="执行中  Executing…")
+        if command == "install":
+            self.execute(self.pip_command_prefix + [
             "install", "-i", SOURCES[self.source_combobox.get()], self.entry.get()
         ])
-        self.buttons["install"].config(text="安装  Install")
-
-    def upgrade(self):
-        self.buttons["upgrade"].config(text="执行中  Executing…")
-        self.execute(
-            self.pip_command_prefix + [
+            self.buttons["install"].config(text="安装  Install")
+        elif command == "upgrade":
+            self.execute(self.pip_command_prefix + [
                 "install", "--upgrade", self.entry.get(), "-i",
                 SOURCES[self.source_combobox.get()]
-            ]
-        )
-        self.buttons["upgrade"].config(text="升级  Upgrade")
-
-    def uninstall(self):
-        self.buttons["uninstall"].config(text="执行中  Executing…")
-        self.execute(self.pip_command_prefix + ["uninstall", self.entry.get(), "-y"])
-        self.buttons["uninstall"].config(text="卸载  Uninstall")
+            ])
+            self.buttons["upgrade"].config(text="升级  Upgrade")
+        elif command == "uninstall":
+            self.execute(self.pip_command_prefix + ["uninstall", self.entry.get(), "-y"])
+            self.buttons["uninstall"].config(text="卸载  Uninstall")
 
     def show_about_window(self):
         about_window = Toplevel(self.main_window)
