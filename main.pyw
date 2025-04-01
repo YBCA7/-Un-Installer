@@ -106,22 +106,20 @@ After the command starts executing, the output will be displayed here.""")
             for button in self.buttons.values():
                 button.config(state="normal")
 
-    def execute_pip_command(self, command):
+    def execute_pip_command(self, command, chinese):
         self.buttons[command].config(text="执行中  Executing…")
         if command == "install":
             self.execute(self.pip_command_prefix + [
             "install", "-i", SOURCES[self.source_combobox.get()], self.entry.get()
         ])
-            self.buttons["install"].config(text="安装  Install")
         elif command == "upgrade":
             self.execute(self.pip_command_prefix + [
                 "install", "--upgrade", self.entry.get(), "-i",
                 SOURCES[self.source_combobox.get()]
             ])
-            self.buttons["upgrade"].config(text="升级  Upgrade")
         elif command == "uninstall":
             self.execute(self.pip_command_prefix + ["uninstall", self.entry.get(), "-y"])
-            self.buttons["uninstall"].config(text="卸载  Uninstall")
+        self.buttons[command].config(text=f"{chinese}  {command.title()}")
 
     def show_about_window(self):
         about_window = Toplevel(self.main_window)
