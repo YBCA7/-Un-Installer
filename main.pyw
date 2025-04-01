@@ -46,11 +46,11 @@ class App:
         self.source_combobox.set(tuple(SOURCES.keys())[0])
 
         self.buttons["install"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("install",)).start())
+            target=self.execute_pip_command, args=("install", "安装").start())
         self.buttons["upgrade"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("upgrade",)).start())
+            target=self.execute_pip_command, args=("upgrade", "升级")).start())
         self.buttons["uninstall"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("uninstall",)).start())
+            target=self.execute_pip_command, args=("uninstall", "卸载")).start())
 
         self.buttons["install"].grid(row=2, columnspan=3, pady=5)
         self.buttons["upgrade"].grid(row=3, columnspan=3, pady=5)
