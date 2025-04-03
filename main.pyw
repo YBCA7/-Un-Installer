@@ -1,3 +1,4 @@
+import webbrowser
 from tkinter import Tk, Toplevel, Text, Scrollbar
 from tkinter.ttk import Label, Button, Entry, Combobox
 from tkinter.messagebox import showerror, showinfo
@@ -7,15 +8,14 @@ from threading import Thread
 from json import load, dump
 from os.path import exists
 from data import dump_default_data
-import webbrowser
 
 
 class App:
     def __init__(self, window):
-        with open('data.json', 'r') as file_to_load:
+        with open('data.json', 'r', encoding='utf-8') as file_to_load:
             data = load(file_to_load)
-        self.LANGUAGES = data['LANGUAGES']
-        self.SOURCES = data['SOURCES']
+        self.languages = data['LANGUAGES']
+        self.sources = data['SOURCES']
         self.settings = data['settings']
         self.lang = self.settings['language']
 
@@ -42,15 +42,15 @@ class App:
         self.setup_widgets()
 
     def save_data(self):
-        with open('data.json', 'w') as file_to_save:
+        with open('data.json', 'w', encoding='utf-8') as file_to_save:
             dump({
-                'LANGUAGES': self.LANGUAGES,
-                'SOURCES': self.SOURCES,
+                'LANGUAGES': self.languages,
+                'SOURCES': self.sources,
                 'settings': self.settings
             }, file_to_save, indent=4)
 
     def tr(self, key):
-        return self.LANGUAGES[self.lang].get(key, key)
+        return self.languages[self.lang].get(key, key)
 
     def setup_widgets(self):
         Label(text=self.tr('package_label')).grid(row=0, column=0, pady=5)
@@ -59,7 +59,7 @@ class App:
         Label(text=self.tr('source_label')).grid(row=1, column=0, pady=5)
         self.widgets["source_combobox"].grid(row=1, column=1, pady=5, columnspan=2)
         self.widgets["source_combobox"]['state'] = 'readonly'
-        self.widgets["source_combobox"]['values'] = tuple(self.SOURCES.keys())
+        self.widgets["source_combobox"]['values'] = tuple(self.sources.keys())
         self.widgets["source_combobox"].set(self.settings['default_source'])
 
         self.widgets["buttons"]["install"].config(command=lambda: Thread(
@@ -132,13 +132,13 @@ class App:
         
         if command == "install":
             self.execute(self.pip_command_prefix + [
-                "install", "-i", self.SOURCES[self.widgets["source_combobox"].get()],
+                "install", "-i", self.sources[self.widgets["source_combobox"].get()],
                 self.widgets["entry"].get()
             ])
         elif command == "upgrade":
             self.execute(self.pip_command_prefix + [
                 "install", "--upgrade", self.widgets["entry"].get(), "-i",
-                self.SOURCES[self.widgets["source_combobox"].get()]
+                self.sources[self.widgets["source_combobox"].get()]
             ])
         elif command == "uninstall":
             self.execute(self.pip_command_prefix +
@@ -174,14 +174,14 @@ class App:
             row=0, column=0, padx=5, pady=5)
         language_combobox = Combobox(settings_window, width=20, state='readonly')
         language_combobox.grid(row=0, column=1, padx=5, pady=5)
-        language_combobox['values'] = tuple(self.LANGUAGES.keys())
+        language_combobox['values'] = tuple(self.languages.keys())
         language_combobox.set(self.settings['language'])
 
         Label(settings_window, text=self.tr('default_source_label')).grid(
             row=1, column=0, padx=5, pady=5)
         source_combobox = Combobox(settings_window, width=20, state='readonly')
         source_combobox.grid(row=1, column=1, padx=5, pady=5)
-        source_combobox['values'] = tuple(self.SOURCES.keys())
+        source_combobox['values'] = tuple(self.sources.keys())
         source_combobox.set(self.settings['default_source'])
 
         def save_settings():
