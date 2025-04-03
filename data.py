@@ -1,4 +1,4 @@
-from json import dump
+from json import dump, load
 
 
 def dump_default_data():
@@ -44,3 +44,11 @@ def dump_default_data():
                 "language": "English", "default_source": "PyPI"
             }
         }, f, indent=4)
+
+def load_data():
+    with open('data.json', 'r', encoding='utf-8') as file_to_load:
+        return load(file_to_load)
+
+def save_data(data):
+    with open('data.json', 'w', encoding='utf-8') as file_to_save:
+        dump(data, file_to_save, indent=4)
