@@ -94,6 +94,10 @@ A Tkinter-based GUI tool for Python package management with multi-source support
 | PyPI                   | https://pypi.org/simple                  |
 | 清华大学 Tsinghua University | https://pypi.tuna.tsinghua.edu.cn/simple |
 
+当然，您也可以通过修改 `data.json` 添加您需要使用的源。
+
+Of course, you can also add the source you need by modifying `data.json`.
+
 ## 界面预览 UI Preview
 
 ```
