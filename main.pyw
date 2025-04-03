@@ -87,7 +87,8 @@ class App:
         self.widgets["output"]["scrollbar"].grid(row=8, column=2, sticky='ns')
         self.widgets["output"]["scrollbar"].config(
             command=self.widgets["output"]["text"].yview)
-        self.widgets["output"]["text"].config(yscrollcommand=self.widgets["output"]["scrollbar"].set)
+        self.widgets["output"]["text"].config(
+            yscrollcommand=self.widgets["output"]["scrollbar"].set)
 
     def show(self, text):
         self.widgets["output"]["text"].config(state="normal")
