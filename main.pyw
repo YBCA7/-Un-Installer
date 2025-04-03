@@ -5,15 +5,13 @@ from tkinter.messagebox import showerror, showinfo
 from subprocess import Popen, PIPE
 from sys import executable
 from threading import Thread
-from json import load, dump
 from os.path import exists
-from data import dump_default_data
+from data import load_data, save_data, dump_default_data
 
 
 class App:
     def __init__(self, window):
-        with open('data.json', 'r', encoding='utf-8') as file_to_load:
-            data = load(file_to_load)
+        data = load_data()
         self.languages = data['LANGUAGES']
         self.sources = data['SOURCES']
         self.settings = data['settings']
@@ -38,16 +36,7 @@ class App:
                 "scrollbar": Scrollbar()
             }
         }
-
         self.setup_widgets()
-
-    def save_data(self):
-        with open('data.json', 'w', encoding='utf-8') as file_to_save:
-            dump({
-                'LANGUAGES': self.languages,
-                'SOURCES': self.sources,
-                'settings': self.settings
-            }, file_to_save, indent=4)
 
     def tr(self, key):
         return self.languages[self.lang].get(key, key)
@@ -159,7 +148,6 @@ class App:
         Label(about_window, text="-Un-Installer",
               font=("Consolas", 20)).pack(padx=5, pady=5)
         Label(about_window, text=self.tr('version_text')).pack(padx=5, pady=5)
-
         Button(about_window, text=self.tr('source_code_btn'),
                command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"),
                width=50).pack(padx=5, pady=5)
@@ -190,7 +178,10 @@ class App:
         def save_settings():
             self.settings['language'] = language_combobox.get()
             self.settings['default_source'] = source_combobox.get()
-            self.save_data()
+            save_data({
+                'LANGUAGES': self.languages, 'SOURCES': self.sources,
+                'settings': self.settings
+            })
             settings_window.destroy()
             showinfo(self.tr('settings_btn'), self.tr('restart_prompt'))
 
@@ -204,7 +195,6 @@ class App:
 if __name__ == "__main__":
     if not exists('data.json'):
         dump_default_data()
-
     main_window = Tk()
     App(main_window)
     main_window.mainloop()
