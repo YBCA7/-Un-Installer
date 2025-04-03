@@ -24,7 +24,7 @@ class App:
         self.main_window.resizable(False, False)
 
         self.pip_command_prefix = [executable, "-m", "pip"]
-        
+
         self.widgets = {
             "buttons": {
                 "install": Button(text=self.tr('install_btn'), width=79),
@@ -55,7 +55,7 @@ class App:
     def setup_widgets(self):
         Label(text=self.tr('package_label')).grid(row=0, column=0, pady=5)
         self.widgets["entry"].grid(row=0, column=1, padx=5, pady=5, columnspan=2)
-        
+
         Label(text=self.tr('source_label')).grid(row=1, column=0, pady=5)
         self.widgets["source_combobox"].grid(row=1, column=1, pady=5, columnspan=2)
         self.widgets["source_combobox"]['state'] = 'readonly'
@@ -74,7 +74,8 @@ class App:
         self.widgets["buttons"]["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text=self.tr('details_btn'),
-               command=lambda: webbrowser.open(f"https://pypi.org/project/{self.widgets['entry'].get()}/"),
+               command=lambda: webbrowser.open(
+                   f"https://pypi.org/project/{self.widgets['entry'].get()}/"),
                width=79).grid(row=5, columnspan=3, pady=5)
         Button(text=self.tr('settings_btn'),
                command=self.show_settings_window, width=79).grid(row=6, columnspan=3, pady=5)
@@ -84,7 +85,8 @@ class App:
         self.show(self.tr('initial_output'))
         self.widgets["output"]["text"].grid(row=8, columnspan=2)
         self.widgets["output"]["scrollbar"].grid(row=8, column=2, sticky='ns')
-        self.widgets["output"]["scrollbar"].config(command=self.widgets["output"]["text"].yview)
+        self.widgets["output"]["scrollbar"].config(
+            command=self.widgets["output"]["text"].yview)
         self.widgets["output"]["text"].config(yscrollcommand=self.widgets["output"]["scrollbar"].set)
 
     def show(self, text):
@@ -129,7 +131,7 @@ class App:
 
     def execute_pip_command(self, command):
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
-        
+
         if command == "install":
             self.execute(self.pip_command_prefix + [
                 "install", "-i", self.sources[self.widgets["source_combobox"].get()],
@@ -152,11 +154,11 @@ class App:
         about_window.focus_set()
         about_window.title(self.tr('about_title'))
         about_window.resizable(False, False)
-        
+
         Label(about_window, text="-Un-Installer",
               font=("Consolas", 20)).pack(padx=5, pady=5)
         Label(about_window, text=self.tr('version_text')).pack(padx=5, pady=5)
-        
+
         Button(about_window, text=self.tr('source_code_btn'),
                command=lambda: webbrowser.open("https://github.com/YBCA7/-Un-Installer"),
                width=50).pack(padx=5, pady=5)
