@@ -36,9 +36,9 @@ def dump_default_data():
                 }
             },
             "SOURCES": {
-                "Aliyun": "https://mirrors.aliyun.com/pypi/simple",
+                "阿里云": "https://mirrors.aliyun.com/pypi/simple",
                 "PyPI": "https://pypi.org/simple",
-                "Tsinghua University": "https://pypi.tuna.tsinghua.edu.cn/simple"
+                "清华大学": "https://pypi.tuna.tsinghua.edu.cn/simple"
             },
             "settings": {
                 "language": "English", "default_source": "PyPI"
