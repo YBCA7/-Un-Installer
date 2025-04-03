@@ -2,7 +2,7 @@ from json import dump
 
 
 def dump_default_data():
-    with open('data.json', 'w') as f:
+    with open('data.json', 'w', encoding='utf-8') as f:
         dump({
             "LANGUAGES": {
                 "English": {
@@ -10,7 +10,8 @@ def dump_default_data():
                     "source_label": "Source: ", "install_btn": "Install",
                     "upgrade_btn": "Upgrade", "uninstall_btn": "Uninstall",
                     "details_btn": "Details of the Package", "about_btn": "About",
-                    "initial_output": "After the command starts executing, the output will be displayed here.",
+                    "initial_output": "After the command starts executing, " +
+                    "the output will be displayed here.",
                     "error_title": "Error", "error_msg": "There were some errors: {error}",
                     "executing_text": "Executing...", "about_title": "About",
                     "version_text": "Version 6.3", "source_code_btn": "Source Code Repository",
