@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green)
 ![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
-![Version](https://img.shields.io/badge/Version-6.3-lightgrey)
+![Version](https://img.shields.io/badge/Version-6.4-lightgrey)
 
 一个基于 `Tkinter` 的 **Python包管理图形界面工具**，提供便捷的 `安装` / `升级` / `卸载` 操作，支持多镜像源选择。
 
@@ -30,7 +30,7 @@ A Tkinter-based GUI tool for Python package management with multi-source support
 
 ## 安装要求 Requirements
 
-- Python 3.6+
+- Python 3.6 +
 - Tkinter（通常包含在Python标准库中）  
   Tkinter (usually included in Python standard library)
 - 以下Python标准库：  
