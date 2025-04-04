@@ -27,6 +27,8 @@ A Tkinter-based GUI tool for Python package management with multi-source support
   Disable buttons during execution to prevent misoperation
 - 🖥️ 控制台风格输出显示  
   Console-style output display with monospace font
+- ⚙️ 可配置语言和默认镜像源  
+  Configurable language and default mirror source
 
 ## 安装要求 Requirements
 
@@ -45,8 +47,8 @@ A Tkinter-based GUI tool for Python package management with multi-source support
 
 1. 输入包名到文本框中  
    Enter the package name in the text box
-2. 选择镜像源（默认：阿里云）  
-   Select a mirror source (default: Aliyun)
+2. 选择镜像源（默认：PyPI）  
+   Select a mirror source (default: PyPI)
 3. 点击对应功能按钮：  
    Click the corresponding function button:
    - **安装 Install**：从选定源安装最新版本  
@@ -57,6 +59,8 @@ A Tkinter-based GUI tool for Python package management with multi-source support
      Completely remove the package
    - **包详情 Details**：在浏览器打开PyPI中有关您在输入框输入的软件包页面  
      Open the PyPI page of the package you entered in the entry
+   - **设置 Settings**：更改语言和默认镜像源  
+     Change language and default mirror source
    - **关于 About**：查看版本信息和源代码  
      View version information and source code
 
@@ -81,18 +85,20 @@ A Tkinter-based GUI tool for Python package management with multi-source support
     Display standard error output
   - 执行期间禁用所有操作按钮  
     Disable all operation buttons during execution
-- 使用 `Toplevel` 创建关于窗口  
-  Use `Toplevel` to create about window
+- 使用 `Toplevel` 创建关于窗口和设置窗口  
+  Use `Toplevel` to create about and settings windows
 - 使用 `ttk` 现代主题控件  
   Use modern `ttk` themed widgets
+- 配置数据持久化存储  
+  Persistent storage of configuration data
 
 ## 支持的镜像源 Supported Sources
 
 | 名称 Name                | URL                                      |
 |-------------------------|------------------------------------------|
-| 阿里云 Aliyun             | https://mirrors.aliyun.com/pypi/simple   |
+| 阿里云 | https://mirrors.aliyun.com/pypi/simple   |
 | PyPI                   | https://pypi.org/simple                  |
-| 清华大学 Tsinghua University | https://pypi.tuna.tsinghua.edu.cn/simple |
+| 清华大学 | https://pypi.tuna.tsinghua.edu.cn/simple |
 
 当然，您也可以通过修改 `data.json` 添加您需要使用的源。
 
@@ -106,7 +112,7 @@ Of course, you can also add the source you need by modifying `data.json`.
 
 [安装 Install 按钮]          [升级 Upgrade 按钮]
 [卸载 Uninstall 按钮]        [包详情 Details 按钮]
-[关于 About 按钮]
+[设置 Settings 按钮]         [关于 About 按钮]
 
 [输出文本框 Output Text]
 ```
