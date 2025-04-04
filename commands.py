@@ -5,11 +5,37 @@ from threading import Thread
 
 
 class PackageManager:
+    """Python包管理命令执行核心
+    Core executor for Python package management commands
+    
+    职责：
+    - 执行pip安装/升级/卸载操作
+    - 实时捕获并转发命令输出
+    - 提供PyPI包详情页跳转
+    ---
+    Responsibilities:
+    - Execute pip install/upgrade/uninstall operations
+    - Capture and forward command output in real-time
+    - Provide PyPI package details page redirection
+    """
+
     def __init__(self, ui_callback):
         self.pip_command_prefix = [executable, "-m", "pip"]
         self.ui_callback = ui_callback
 
     def execute(self, command, package_name, source_url=None):
+        """执行pip命令主入口 / Main entry for pip command execution
+        
+        Args:
+            command (str): 操作类型 ['install'|'upgrade'|'uninstall'] / 
+                          Command type ['install'|'upgrade'|'uninstall']
+            package_name (str): 目标包名称 / Target package name
+            source_url (str, optional): 镜像源URL / Mirror source URL
+        
+        Raises:
+            ValueError: 当传入无效命令类型时 / When invalid command type is passed
+        """
+
         if command == "install":
             full_command = self.pip_command_prefix + [
                 "install", "-i", source_url, package_name
