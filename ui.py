@@ -8,6 +8,15 @@ from commands import PackageManager
 
 
 class App:
+    """Tkinter图形界面主类 / Main Tkinter GUI class
+    
+    功能特性 / Features:
+    - 多语言支持 / Multilingual support
+    - 镜像源选择 / Mirror source selection
+    - 实时输出显示 / Real-time output display
+    - 线程安全操作 / Thread-safe operations
+    """
+
     def __init__(self, window):
         data = load_data()
         self.languages = data['LANGUAGES']
@@ -37,6 +46,15 @@ class App:
         self.setup_widgets()
 
     def ui_callback(self, action, *args):
+        """包管理器回调处理器 / Package manager callback handler
+        
+        Args:
+            action (str): 操作类型 ['show_output'|'show_error'] / 
+                         Action type ['show_output'|'show_error']
+            *args: 可变参数 (输出内容/错误信息) / 
+                   Variadic args (output content/error message)
+        """
+
         if action == 'show_output':
             self.show(args[0])
         elif action == 'show_error':
@@ -92,6 +110,17 @@ class App:
         self.widgets["output"]["text"].config(state="disabled")
 
     def execute_command(self, command):
+        """包装命令执行流程 / Wrapped command execution flow
+        
+        Args:
+            command (str): 操作类型 ['install'|'upgrade'|'uninstall'] / 
+                          Command type ['install'|'upgrade'|'uninstall']
+        
+        执行流程 / Execution flow:
+        1. 禁用按钮 -> 2. 执行命令 -> 3. 恢复按钮 / 
+        1. Disable buttons -> 2. Execute command -> 3. Restore buttons
+        """
+
         self.disable_buttons()
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
         self.widgets["output"]["text"].config(state="normal")
