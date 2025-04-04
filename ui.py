@@ -1,9 +1,11 @@
+import webbrowser
 from tkinter import Toplevel, Text, Scrollbar
 from tkinter.ttk import Label, Button, Entry, Combobox
-from tkinter.messagebox import showinfo
+from tkinter.messagebox import showinfo, showerror
+from threading import Thread
 from data import load_data, save_data
 from commands import PackageManager
-from threading import Thread
+
 
 class App:
     def __init__(self, window):
@@ -67,7 +69,8 @@ class App:
         self.widgets["buttons"]["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text=self.tr('details_btn'),
-               command=lambda: self.package_manager.open_package_details(self.widgets['entry'].get()),
+               command=lambda: self.package_manager.open_package_details(
+                   self.widgets['entry'].get()),
                width=79).grid(row=5, columnspan=3, pady=5)
         Button(text=self.tr('settings_btn'),
                command=self.show_settings_window, width=79).grid(row=6, columnspan=3, pady=5)
@@ -91,13 +94,12 @@ class App:
     def execute_command(self, command):
         self.disable_buttons()
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
-        
-        package_name = self.widgets["entry"].get()
-        source = self.widgets["source_combobox"].get()
-        source_url = self.sources[source] if command in ["install", "upgrade"] else None
-        
-        self.package_manager.execute(command, package_name, source_url)
-        
+
+        self.package_manager.execute(command,
+            self.widgets["entry"].get(),
+            self.sources[self.widgets["source_combobox"].get()]
+                if command in ["install", "upgrade"] else None)
+
         self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
         self.enable_buttons()
 
