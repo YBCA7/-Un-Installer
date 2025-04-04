@@ -2,7 +2,7 @@ from json import dump, load
 
 
 def dump_default_data():
-    with open('data.json', 'w', encoding='utf-8') as f:
+    with open('data.json', 'w', encoding='utf-8') as file_to_dump:
         dump({
             "LANGUAGES": {
                 "English": {
@@ -43,7 +43,7 @@ def dump_default_data():
             "settings": {
                 "language": "English", "default_source": "PyPI"
             }
-        }, f, indent=4)
+        }, file_to_dump, indent=4)
 
 def load_data():
     with open('data.json', 'r', encoding='utf-8') as file_to_load:
