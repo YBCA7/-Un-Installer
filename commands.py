@@ -2,7 +2,7 @@ import webbrowser
 from subprocess import Popen, PIPE
 from sys import executable
 from threading import Thread
-from tkinter.messagebox import showerror
+
 
 class PackageManager:
     def __init__(self, ui_callback):
@@ -29,7 +29,6 @@ class PackageManager:
                   bufsize=1, universal_newlines=True) as process:
             Thread(target=self._catch_output, args=(process,), daemon=True).start()
             process.wait()
-            
             if process.returncode != 0:
                 err = process.stderr.read()
                 if err:
