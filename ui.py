@@ -41,8 +41,8 @@ class App:
             self.show(args[0])
         elif action == 'show_error':
             self.show(args[0])
-            self.enable_buttons()
             showerror(self.tr('error_title'), args[0])
+            self.enable_buttons()
 
     def tr(self, key):
         return self.languages[self.lang].get(key, key)
