@@ -1,12 +1,9 @@
-import webbrowser
 from tkinter import Toplevel, Text, Scrollbar
 from tkinter.ttk import Label, Button, Entry, Combobox
-from tkinter.messagebox import showerror, showinfo
-from subprocess import Popen, PIPE
-from sys import executable
-from threading import Thread
+from tkinter.messagebox import showinfo
 from data import load_data, save_data
-
+from commands import PackageManager
+from threading import Thread
 
 class App:
     def __init__(self, window):
@@ -20,7 +17,7 @@ class App:
         self.main_window.title(self.tr('app_title'))
         self.main_window.resizable(False, False)
 
-        self.pip_command_prefix = [executable, "-m", "pip"]
+        self.package_manager = PackageManager(self.ui_callback)
 
         self.widgets = {
             "buttons": {
@@ -37,6 +34,14 @@ class App:
         }
         self.setup_widgets()
 
+    def ui_callback(self, action, *args):
+        if action == 'show_output':
+            self.show(args[0])
+        elif action == 'show_error':
+            self.show(args[0])
+            self.enable_buttons()
+            showerror(self.tr('error_title'), args[0])
+
     def tr(self, key):
         return self.languages[self.lang].get(key, key)
 
@@ -50,20 +55,19 @@ class App:
         self.widgets["source_combobox"]['values'] = tuple(self.sources.keys())
         self.widgets["source_combobox"].set(self.settings['default_source'])
 
-        self.widgets["buttons"]["install"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("install",)).start())
-        self.widgets["buttons"]["upgrade"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("upgrade",)).start())
-        self.widgets["buttons"]["uninstall"].config(command=lambda: Thread(
-            target=self.execute_pip_command, args=("uninstall",)).start())
+        self.widgets["buttons"]["install"].config(
+            command=lambda: Thread(target=self.execute_command, args=("install",)).start())
+        self.widgets["buttons"]["upgrade"].config(
+            command=lambda: Thread(target=self.execute_command, args=("upgrade",)).start())
+        self.widgets["buttons"]["uninstall"].config(
+            command=lambda: Thread(target=self.execute_command, args=("uninstall",)).start())
 
         self.widgets["buttons"]["install"].grid(row=2, columnspan=3, pady=5)
         self.widgets["buttons"]["upgrade"].grid(row=3, columnspan=3, pady=5)
         self.widgets["buttons"]["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text=self.tr('details_btn'),
-               command=lambda: webbrowser.open(
-                   f"https://pypi.org/project/{self.widgets['entry'].get()}/"),
+               command=lambda: self.package_manager.open_package_details(self.widgets['entry'].get()),
                width=79).grid(row=5, columnspan=3, pady=5)
         Button(text=self.tr('settings_btn'),
                command=self.show_settings_window, width=79).grid(row=6, columnspan=3, pady=5)
@@ -84,58 +88,26 @@ class App:
         self.widgets["output"]["text"].see('end')
         self.widgets["output"]["text"].config(state="disabled")
 
-    def execute(self, command):
+    def execute_command(self, command):
+        self.disable_buttons()
+        self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
+        
+        package_name = self.widgets["entry"].get()
+        source = self.widgets["source_combobox"].get()
+        source_url = self.sources[source] if command in ["install", "upgrade"] else None
+        
+        self.package_manager.execute(command, package_name, source_url)
+        
+        self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
+        self.enable_buttons()
+
+    def disable_buttons(self):
         for button in self.widgets["buttons"].values():
             button.config(state="disabled")
 
-        self.widgets["output"]["text"].config(state="normal")
-        self.widgets["output"]["text"].delete(1.0, 'end')
-        self.widgets["output"]["text"].config(state="disabled")
-
-        def catch_and_show_output(current_process):
-            while True:
-                output = current_process.stdout.readline()
-                if output == '' and current_process.poll() is not None:
-                    break
-                if output:
-                    self.show(output)
-            current_process.stdout.close()
-
-        try:
-            with Popen(command, stdout=PIPE, stderr=PIPE, text=True,
-                       bufsize=1, universal_newlines=True) as process:
-                Thread(target=catch_and_show_output, args=(process,), daemon=True).start()
-                process.wait()
-                if process.returncode != 0:
-                    err = process.stderr.read()
-                    if err:
-                        self.show(err)
-                        showerror(self.tr('error_title'), err)
-        except Exception as e:
-            self.show(self.tr('error_msg').format(error=str(e)) + "\n")
-            showerror(self.tr('error_title'), self.tr('error_msg').format(error=str(e)))
-        finally:
-            for button in self.widgets["buttons"].values():
-                button.config(state="normal")
-
-    def execute_pip_command(self, command):
-        self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
-
-        if command == "install":
-            self.execute(self.pip_command_prefix + [
-                "install", "-i", self.sources[self.widgets["source_combobox"].get()],
-                self.widgets["entry"].get()
-            ])
-        elif command == "upgrade":
-            self.execute(self.pip_command_prefix + [
-                "install", "--upgrade", self.widgets["entry"].get(), "-i",
-                self.sources[self.widgets["source_combobox"].get()]
-            ])
-        elif command == "uninstall":
-            self.execute(self.pip_command_prefix +
-                         ["uninstall", self.widgets["entry"].get(), "-y"])
-
-        self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
+    def enable_buttons(self):
+        for button in self.widgets["buttons"].values():
+            button.config(state="normal")
 
     def show_about_window(self):
         about_window = Toplevel(self.main_window)
