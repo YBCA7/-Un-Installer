@@ -61,6 +61,18 @@ class PackageManager:
                     self.ui_callback('show_error', err)
 
     def _catch_output(self, process):
+        """持续捕获子进程输出 / Continuously capture subprocess output
+    
+        实现逻辑 / Implementation:
+        - 通过轮询方式实时读取stdout
+        - 进程结束时自动退出循环
+        - 通过回调转发输出内容
+        ---
+        - Read stdout in real-time via polling
+        - Auto-exit loop when process ends
+        - Forward output via callback
+        """
+
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
