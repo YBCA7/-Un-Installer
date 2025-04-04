@@ -94,6 +94,9 @@ class App:
     def execute_command(self, command):
         self.disable_buttons()
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
+        self.widgets["output"]["text"].config(state="normal")
+        self.widgets["output"]["text"].delete(1.0, 'end')
+        self.widgets["output"]["text"].config(state="disabled")
 
         self.package_manager.execute(command,
             self.widgets["entry"].get(),
