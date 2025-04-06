@@ -5,7 +5,8 @@ from threading import Thread
 
 
 class PackageManager:
-    """Python包管理命令执行核心
+    """
+    Python包管理命令执行核心
     Core executor for Python package management commands
     
     职责：
@@ -24,7 +25,8 @@ class PackageManager:
         self.ui_callback = ui_callback
 
     def execute(self, command, package_name, source_url=None):
-        """执行pip命令主入口 / Main entry for pip command execution
+        """
+        执行pip命令主入口 / Main entry for pip command execution
         
         Args:
             command (str): 操作类型 ['install'|'upgrade'|'uninstall'] / 
@@ -61,7 +63,8 @@ class PackageManager:
                     self.ui_callback('show_error', err)
 
     def _catch_output(self, process):
-        """持续捕获子进程输出 / Continuously capture subprocess output
+        """
+        持续捕获子进程输出 / Continuously capture subprocess output
     
         实现逻辑 / Implementation:
         - 通过轮询方式实时读取stdout
@@ -81,5 +84,6 @@ class PackageManager:
                 self.ui_callback('show_output', output)
         process.stdout.close()
 
-    def open_package_details(self, package_name):
+    @staticmethod
+    def open_package_details(package_name):
         webbrowser.open(f"https://pypi.org/project/{package_name}/")

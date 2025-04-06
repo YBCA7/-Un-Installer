@@ -8,7 +8,8 @@ from commands import PackageManager
 
 
 class App:
-    """Tkinter图形界面主类 / Main Tkinter GUI class
+    """
+    Tkinter图形界面主类 / Main Tkinter GUI class
     
     功能特性 / Features:
     - 多语言支持 / Multilingual support
@@ -46,7 +47,8 @@ class App:
         self.setup_widgets()
 
     def ui_callback(self, action, *args):
-        """包管理器回调处理器 / Package manager callback handler
+        """
+        包管理器回调处理器 / Package manager callback handler
         
         Args:
             action (str): 操作类型 ['show_output'|'show_error'] / 
@@ -87,7 +89,7 @@ class App:
         self.widgets["buttons"]["uninstall"].grid(row=4, columnspan=3, pady=5)
 
         Button(text=self.tr('details_btn'),
-               command=lambda: self.package_manager.open_package_details(
+               command=lambda: PackageManager.open_package_details(
                    self.widgets['entry'].get()),
                width=79).grid(row=5, columnspan=3, pady=5)
         Button(text=self.tr('settings_btn'),
@@ -110,7 +112,8 @@ class App:
         self.widgets["output"]["text"].config(state="disabled")
 
     def execute_command(self, command):
-        """包装命令执行流程 / Wrapped command execution flow
+        """
+        包装命令执行流程 / Wrapped command execution flow
         
         Args:
             command (str): 操作类型 ['install'|'upgrade'|'uninstall'] / 
