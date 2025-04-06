@@ -18,7 +18,8 @@ def dump_default_data():
                     "close_btn": "Close", "settings_btn": "Settings",
                     "language_label": "Language: ", "default_source_label": "Default Source: ",
                     "save_btn": "Confirm", "cancel_btn": "Cancel",
-                    "restart_prompt": "Please restart the application to apply changes."
+                    "restart_prompt": "Please restart the application to apply changes.",
+                    "confirm_exit_text": "A command is executing. Are you sure you want to quit?"
                 },
                 "中文": {
                     "app_title": "-Un-Installer", "package_label": "需要装卸的包: ",
@@ -32,7 +33,8 @@ def dump_default_data():
                     "close_btn": "关闭", "settings_btn": "设置",
                     "language_label": "语言: ", "default_source_label": "默认下载源: ",
                     "save_btn": "确定", "cancel_btn": "取消",
-                    "restart_prompt": "请重启程序以应用更改。"
+                    "restart_prompt": "请重启程序以应用更改。" ,
+                    "confirm_exit_text": "有指令正在执行，确定要退出吗？"
                 }
             },
             "SOURCES": {

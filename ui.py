@@ -1,7 +1,7 @@
 import webbrowser
 from tkinter import Toplevel, Text, Scrollbar
 from tkinter.ttk import Label, Button, Entry, Combobox
-from tkinter.messagebox import showinfo, showerror
+from tkinter.messagebox import showinfo, showerror, askyesno
 from threading import Thread
 from data import load_data, save_data
 from commands import PackageManager
@@ -28,6 +28,7 @@ class App:
         self.main_window = window
         self.main_window.title(self.tr('app_title'))
         self.main_window.resizable(False, False)
+        self.main_window.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.package_manager = PackageManager(self.ui_callback)
 
@@ -45,6 +46,15 @@ class App:
             }
         }
         self.setup_widgets()
+
+    def on_close(self):
+        if self.package_manager.process:
+            if askyesno(self.tr('app_title'),
+                        self.tr('confirm_exit_text')):
+                self.package_manager.terminate()
+                self.main_window.destroy()
+        else:
+            self.main_window.destroy()
 
     def ui_callback(self, action, *args):
         """

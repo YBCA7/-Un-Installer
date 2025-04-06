@@ -23,6 +23,17 @@ class PackageManager:
     def __init__(self, ui_callback):
         self.pip_command_prefix = [executable, "-m", "pip"]
         self.ui_callback = ui_callback
+        self.process = None
+
+    def terminate(self):
+        """
+        终止当前子进程 / Terminate the current child process
+        """
+
+        if self.process is not None:
+            self.process.terminate()
+            self.process.wait()
+            self.process = None
 
     def execute(self, command, package_name, source_url=None):
         """
@@ -38,29 +49,35 @@ class PackageManager:
             ValueError: 当传入无效命令类型时 / When invalid command type is passed
         """
 
-        if command == "install":
-            full_command = self.pip_command_prefix + [
-                "install", "-i", source_url, package_name
-            ]
-        elif command == "upgrade":
-            full_command = self.pip_command_prefix + [
-                "install", "--upgrade", package_name, "-i", source_url
-            ]
-        elif command == "uninstall":
-            full_command = self.pip_command_prefix + [
-                "uninstall", package_name, "-y"
-            ]
-        else:
-            raise ValueError("Invalid command")
+        try:
+            if command == "install":
+                full_command = self.pip_command_prefix + [
+                    "install", "-i", source_url, package_name
+                ]
+            elif command == "upgrade":
+                full_command = self.pip_command_prefix + [
+                    "install", "--upgrade", package_name, "-i", source_url
+                ]
+            elif command == "uninstall":
+                full_command = self.pip_command_prefix + [
+                    "uninstall", package_name, "-y"
+                ]
+            else:
+                raise ValueError("Invalid command")
 
-        with Popen(full_command, stdout=PIPE, stderr=PIPE, text=True,
-                  bufsize=1, universal_newlines=True) as process:
-            Thread(target=self._catch_output, args=(process,), daemon=True).start()
-            process.wait()
-            if process.returncode != 0:
-                err = process.stderr.read()
-                if err:
-                    self.ui_callback('show_error', err)
+            with Popen(full_command, stdout=PIPE, stderr=PIPE, text=True,
+                bufsize=1, universal_newlines=True) as self.process:
+                Thread(target=self._catch_output, args=(self.process,), daemon=True).start()
+                self.process.wait()
+                if self.process.returncode != 0:
+                    err = self.process.stderr.read()
+                    if err:
+                        self.ui_callback('show_error', err)
+        finally:
+            if self.process:
+                self.process.stdout.close()
+                self.process.stderr.close()
+            self.process = None
 
     def _catch_output(self, process):
         """
