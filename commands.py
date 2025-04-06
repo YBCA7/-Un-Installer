@@ -8,7 +8,7 @@ class PackageManager:
     """
     Python包管理命令执行核心
     Core executor for Python package management commands
-    
+
     职责：
     - 执行pip安装/升级/卸载操作
     - 实时捕获并转发命令输出
@@ -38,13 +38,13 @@ class PackageManager:
     def execute(self, command, package_name, source_url=None):
         """
         执行pip命令主入口 / Main entry for pip command execution
-        
+
         Args:
-            command (str): 操作类型 ['install'|'upgrade'|'uninstall'] / 
+            command (str): 操作类型 ['install'|'upgrade'|'uninstall'] /
                           Command type ['install'|'upgrade'|'uninstall']
             package_name (str): 目标包名称 / Target package name
             source_url (str, optional): 镜像源URL / Mirror source URL
-        
+
         Raises:
             ValueError: 当传入无效命令类型时 / When invalid command type is passed
         """
@@ -65,14 +65,16 @@ class PackageManager:
             else:
                 raise ValueError("Invalid command")
 
-            with Popen(full_command, stdout=PIPE, stderr=PIPE, text=True,
-                bufsize=1, universal_newlines=True) as self.process:
-                Thread(target=self._catch_output, args=(self.process,), daemon=True).start()
-                self.process.wait()
-                if self.process.returncode != 0:
-                    err = self.process.stderr.read()
-                    if err:
-                        self.ui_callback('show_error', err)
+            self.process = Popen(full_command, stdout=PIPE, stderr=PIPE,
+                                 text=True, bufsize=1, universal_newlines=True)
+            Thread(target=self._catch_output, args=(self.process,), daemon=True).start()
+            self.process.wait()
+
+            return_code = self.process.returncode
+            if return_code != 0:
+                err = self.process.stderr.read()
+                if err:
+                    self.ui_callback('show_error', err)
         finally:
             if self.process:
                 self.process.stdout.close()
@@ -82,7 +84,7 @@ class PackageManager:
     def _catch_output(self, process):
         """
         持续捕获子进程输出 / Continuously capture subprocess output
-    
+
         实现逻辑 / Implementation:
         - 通过轮询方式实时读取stdout
         - 进程结束时自动退出循环
