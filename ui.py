@@ -41,6 +41,7 @@ class App:
             "entry": Entry(width=40),
             "source_combobox": Combobox(width=37),
             "file_label": Label(text=self.tr('file_label')),
+            "file_btn": Button(text=self.tr('file_btn'), width=36),
             "file_list": Listbox(width=37),
             "output": {
                 "text": Text(width=80, height=10, font=("Consolas", 10)),
@@ -109,12 +110,13 @@ class App:
         Button(text=self.tr('about_btn'),
                command=self.show_about_window, width=79).grid(row=7, columnspan=3, pady=5)
 
-        self.widgets["file_list"].grid(row=8, column=0)
-        self.widgets["file_label"].grid(row=8, column=1)
+        self.widgets["file_list"].grid(row=8, column=0, rowspan=2, pady=5)
+        self.widgets["file_label"].grid(row=8, column=1, pady=5)
+        self.widgets["file_btn"].grid(row=9, column=1, pady=5)
 
         self.show(self.tr('initial_output'))
-        self.widgets["output"]["text"].grid(row=9, columnspan=2)
-        self.widgets["output"]["scrollbar"].grid(row=9, column=2, sticky='ns')
+        self.widgets["output"]["text"].grid(row=10, columnspan=2)
+        self.widgets["output"]["scrollbar"].grid(row=10, column=2, sticky='ns')
         self.widgets["output"]["scrollbar"].config(
             command=self.widgets["output"]["text"].yview)
         self.widgets["output"]["text"].config(
