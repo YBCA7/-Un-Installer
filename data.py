@@ -11,7 +11,7 @@ def dump_default_data():
                     "upgrade_btn": "Upgrade", "uninstall_btn": "Uninstall",
                     "details_btn": "Details of the Package", "about_btn": "About",
                     "initial_output": "After the command starts executing, " +
-                    "the output will be displayed here.",
+                                      "the output will be displayed here.",
                     "error_title": "Error", "error_msg": "There were some errors: {error}",
                     "executing_text": "Executing...", "about_title": "About",
                     "version_text": "Version 0.6.4", "source_code_btn": "Source Code Repository",
@@ -19,7 +19,9 @@ def dump_default_data():
                     "language_label": "Language: ", "default_source_label": "Default Source: ",
                     "save_btn": "Confirm", "cancel_btn": "Cancel",
                     "restart_prompt": "Please restart the application to apply changes.",
-                    "confirm_exit_text": "A command is executing. Are you sure you want to quit?"
+                    "confirm_exit_text": "A command is executing. Are you sure you want to quit?",
+                    "file_label": "To batch manage the package in a file\nformat that complies " +
+                                  "with requirements.txt,\nplease drag and drop the file here."
                 },
                 "中文": {
                     "app_title": "-Un-Installer", "package_label": "需要装卸的包: ",
@@ -34,7 +36,8 @@ def dump_default_data():
                     "language_label": "语言: ", "default_source_label": "默认下载源: ",
                     "save_btn": "确定", "cancel_btn": "取消",
                     "restart_prompt": "请重启程序以应用更改。" ,
-                    "confirm_exit_text": "有指令正在执行，确定要退出吗？"
+                    "confirm_exit_text": "有指令正在执行，确定要退出吗？",
+                    "file_label": "若要以一个格式符合 requirements.txt 的文件批量管理包，请将文件拖拽到此。"
                 }
             },
             "SOURCES": {

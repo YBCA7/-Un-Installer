@@ -1,5 +1,5 @@
 import webbrowser
-from tkinter import Toplevel, Text, Scrollbar
+from tkinter import Toplevel, Text, Scrollbar, Listbox
 from tkinter.ttk import Label, Button, Entry, Combobox
 from tkinter.messagebox import showinfo, showerror, askyesno
 from threading import Thread
@@ -40,6 +40,8 @@ class App:
             },
             "entry": Entry(width=40),
             "source_combobox": Combobox(width=37),
+            "file_label": Label(text=self.tr('file_label')),
+            "file_list": Listbox(width=37),
             "output": {
                 "text": Text(width=80, height=10, font=("Consolas", 10)),
                 "scrollbar": Scrollbar()
@@ -107,9 +109,12 @@ class App:
         Button(text=self.tr('about_btn'),
                command=self.show_about_window, width=79).grid(row=7, columnspan=3, pady=5)
 
+        self.widgets["file_list"].grid(row=8, column=0)
+        self.widgets["file_label"].grid(row=8, column=1)
+
         self.show(self.tr('initial_output'))
-        self.widgets["output"]["text"].grid(row=8, columnspan=2)
-        self.widgets["output"]["scrollbar"].grid(row=8, column=2, sticky='ns')
+        self.widgets["output"]["text"].grid(row=9, columnspan=2)
+        self.widgets["output"]["scrollbar"].grid(row=9, column=2, sticky='ns')
         self.widgets["output"]["scrollbar"].config(
             command=self.widgets["output"]["text"].yview)
         self.widgets["output"]["text"].config(
