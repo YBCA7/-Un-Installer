@@ -1,5 +1,6 @@
 from json import dump, load
 
+
 DEFAULT_DATA = {
     "LANGUAGES": {
         "English": {
@@ -49,6 +50,7 @@ DEFAULT_DATA = {
         "language": "English", "default_source": "PyPI"
     }
 }
+
 
 def dump_default_data():
     with open('data.json', 'w', encoding='utf-8') as file_to_dump:
