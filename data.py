@@ -56,9 +56,11 @@ def dump_default_data():
     with open('data.json', 'w', encoding='utf-8') as file_to_dump:
         dump(DEFAULT_DATA, file_to_dump, indent=4)
 
+
 def load_data():
     with open('data.json', 'r', encoding='utf-8') as file_to_load:
         return load(file_to_load)
+
 
 def save_data(data):
     with open('data.json', 'w', encoding='utf-8') as file_to_save:
