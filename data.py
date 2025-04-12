@@ -20,9 +20,9 @@ def dump_default_data():
                     "save_btn": "Confirm", "cancel_btn": "Cancel",
                     "restart_prompt": "Please restart the application to apply changes.",
                     "confirm_exit_text": "A command is executing. Are you sure you want to quit?",
-                    "file_label": "To batch manage the package in a file\nformat that complies " +
-                                  "with requirements.txt,\nplease drag and drop the file here.",
-                    "file_btn": "Add a File"
+                    "file_label": "To batch manage the package in files\nformat that complies " +
+                                  "with requirements.txt.",
+                    "file_btn": "Add Files"
                 },
                 "中文": {
                     "app_title": "-Un-Installer", "package_label": "需要装卸的包: ",
@@ -32,13 +32,14 @@ def dump_default_data():
                     "initial_output": "开始执行命令后，这里将显示输出。",
                     "error_title": "错误", "error_msg": "出现了一些错误: {error}",
                     "executing_text": "执行中...", "about_title": "关于",
-                    "version_text": "版本 0.6.4", "source_code_btn": "源代码仓库",
+                    "version_text": "版本 0.7.0", "source_code_btn": "源代码仓库",
                     "close_btn": "关闭", "settings_btn": "设置",
                     "language_label": "语言: ", "default_source_label": "默认下载源: ",
                     "save_btn": "确定", "cancel_btn": "取消",
                     "restart_prompt": "请重启程序以应用更改。" ,
                     "confirm_exit_text": "有指令正在执行，确定要退出吗？",
-                    "file_label": "若要以一个格式符合 requirements.txt 的文件批量管理包，请将文件拖拽到此。",
+                    "file_label": "点击下方按钮，以格式符合" +
+                                  "requirements.txt 的文件批量管理包。",
                     "file_btn": "添加文件"
                 }
             },
