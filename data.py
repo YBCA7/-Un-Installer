@@ -14,7 +14,7 @@ def dump_default_data():
                                       "the output will be displayed here.",
                     "error_title": "Error", "error_msg": "There were some errors: {error}",
                     "executing_text": "Executing...", "about_title": "About",
-                    "version_text": "Version 0.6.4", "source_code_btn": "Source Code Repository",
+                    "version_text": "Version 0.7.0", "source_code_btn": "Source Code Repository",
                     "close_btn": "Close", "settings_btn": "Settings",
                     "language_label": "Language: ", "default_source_label": "Default Source: ",
                     "save_btn": "Confirm", "cancel_btn": "Cancel",
