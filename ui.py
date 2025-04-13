@@ -1,5 +1,5 @@
 import webbrowser
-from tkinter import Toplevel, Text, Scrollbar, Listbox, END, StringVar
+from tkinter import Toplevel, Text, Scrollbar, Listbox, END
 from tkinter.ttk import Label, Button, Entry, Combobox, LabelFrame
 from tkinter.messagebox import showinfo, showerror, askyesno
 from tkinter.filedialog import askopenfilenames
