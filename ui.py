@@ -1,6 +1,6 @@
 import webbrowser
 from tkinter import Toplevel, Text, Scrollbar, Listbox
-from tkinter.ttk import Label, Button, Entry, Combobox
+from tkinter.ttk import Label, Button, Entry, Combobox, LabelFrame
 from tkinter.messagebox import showinfo, showerror, askyesno
 from threading import Thread
 from data import load_data, save_data
@@ -32,6 +32,7 @@ class App:
 
         self.package_manager = PackageManager(self.ui_callback)
 
+        self.batch_frame = LabelFrame(self.main_window, text=self.tr("batch_label"))
         self.widgets = {
             "buttons": {
                 "install": Button(text=self.tr('install_btn'), width=79),
@@ -40,9 +41,10 @@ class App:
             },
             "entry": Entry(width=40),
             "source_combobox": Combobox(width=37),
-            "file_label": Label(text=self.tr('file_label')),
-            "file_btn": Button(text=self.tr('file_btn'), width=36),
-            "file_list": Listbox(width=37),
+            "file_label": Label(self.batch_frame, text=self.tr('file_label')),
+            "file_btn": Button(self.batch_frame, text=self.tr('file_btn'), width=36),
+            "file_list": Listbox(self.batch_frame, width=37),
+            "file_scroll": Scrollbar(self.batch_frame),
             "output": {
                 "text": Text(width=80, height=10, font=("Consolas", 10)),
                 "scrollbar": Scrollbar()
@@ -110,9 +112,15 @@ class App:
         Button(text=self.tr('about_btn'),
                command=self.show_about_window, width=79).grid(row=7, columnspan=3, pady=5)
 
-        self.widgets["file_list"].grid(row=8, column=0, rowspan=2, pady=5)
-        self.widgets["file_label"].grid(row=8, column=1, pady=5)
-        self.widgets["file_btn"].grid(row=9, column=1, pady=5)
+        self.batch_frame.grid(row=8, columnspan=3, pady=5)
+        self.widgets["file_list"].grid(row=0, column=0, rowspan=2, pady=5)
+        self.widgets["file_scroll"].grid(row=0, column=1, rowspan=2,sticky='ns')
+        self.widgets["file_scroll"].config(
+            command=self.widgets["file_list"].yview)
+        self.widgets["file_list"].config(
+            yscrollcommand=self.widgets["file_scroll"].set)
+        self.widgets["file_label"].grid(row=0, column=2, padx=10)
+        self.widgets["file_btn"].grid(row=1, column=2, padx=10)
 
         self.show(self.tr('initial_output'))
         self.widgets["output"]["text"].grid(row=10, columnspan=2)

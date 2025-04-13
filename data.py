@@ -20,7 +20,8 @@ DEFAULT_DATA = {
             "confirm_exit_text": "A command is executing. Are you sure you want to quit?",
             "file_label": "To batch manage the package in files\nformat that complies " +
                           "with requirements.txt.",
-            "file_btn": "Add Files"
+            "file_btn": "Add Files",
+            "batch_label": "Batch Operations"
         },
         "中文": {
             "app_title": "-Un-Installer", "package_label": "需要装卸的包: ",
@@ -36,9 +37,10 @@ DEFAULT_DATA = {
             "save_btn": "确定", "cancel_btn": "取消",
             "restart_prompt": "请重启程序以应用更改。" ,
             "confirm_exit_text": "有指令正在执行，确定要退出吗？",
-            "file_label": "点击下方按钮，以格式符合" +
+            "file_label": "点击下方按钮，以格式符合\n" +
                           "requirements.txt 的文件批量管理包。",
-            "file_btn": "添加文件"
+            "file_btn": "添加文件",
+            "batch_label": "批量操作"
         }
     },
     "SOURCES": {
