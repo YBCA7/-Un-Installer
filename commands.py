@@ -35,14 +35,15 @@ class PackageManager:
             self.process.wait()
             self.process = None
 
-    def execute(self, command, package_name, source_url=None):
+    def execute(self, command, name, require=False, source_url=None):
         """
         执行pip命令主入口 / Main entry for pip command execution
 
         Args:
             command (str): 操作类型 ['install'|'upgrade'|'uninstall'] /
                           Command type ['install'|'upgrade'|'uninstall']
-            package_name (str): 目标包名称 / Target package name
+            name (str): 目标包或文件名称 / Target package or file name
+            require (bool, optional): 是否从文件管理包 / Manage from a file or not
             source_url (str, optional): 镜像源URL / Mirror source URL
 
         Raises:
@@ -52,18 +53,21 @@ class PackageManager:
         try:
             if command == "install":
                 full_command = self.pip_command_prefix + [
-                    "install", "-i", source_url, package_name
+                    "install", name, "-i", source_url
                 ]
             elif command == "upgrade":
                 full_command = self.pip_command_prefix + [
-                    "install", "--upgrade", package_name, "-i", source_url
+                    "install", name, "--upgrade", "-i", source_url
                 ]
             elif command == "uninstall":
                 full_command = self.pip_command_prefix + [
-                    "uninstall", package_name, "-y"
+                    "uninstall", name, "-y"
                 ]
             else:
                 raise ValueError("Invalid command")
+
+            if require:
+                full_command.insert(4, "-r")
 
             self.process = Popen(full_command, stdout=PIPE, stderr=PIPE,
                                  text=True, bufsize=1, universal_newlines=True)
