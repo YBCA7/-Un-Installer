@@ -162,14 +162,13 @@ class App:
 
         self.disable_buttons()
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
-        self.widgets["output"]["text"].config(state="normal")
-        self.show("\n\n")
-        self.widgets["output"]["text"].config(state="disabled")
 
         package = self.widgets["entry"].get()
         files = [self.widgets["file_list"].get(i)
                  for i in range(self.widgets["file_list"].size())]
 
+        if file or package:
+            self.show("\n\n")
         if package:
             self.package_manager.execute(command=command, name=package,
                 source_url=self.sources[self.widgets["source_combobox"].get()]
