@@ -167,7 +167,7 @@ class App:
         files = [self.widgets["file_list"].get(i)
                  for i in range(self.widgets["file_list"].size())]
 
-        if file or package:
+        if files or package:
             self.show("\n\n")
         if package:
             self.package_manager.execute(command=command, name=package,
