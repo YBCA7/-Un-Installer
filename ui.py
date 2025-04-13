@@ -1,7 +1,8 @@
 import webbrowser
-from tkinter import Toplevel, Text, Scrollbar, Listbox
+from tkinter import Toplevel, Text, Scrollbar, Listbox, END, StringVar
 from tkinter.ttk import Label, Button, Entry, Combobox, LabelFrame
 from tkinter.messagebox import showinfo, showerror, askyesno
+from tkinter.filedialog import askopenfilenames
 from threading import Thread
 from data import load_data, save_data
 from commands import PackageManager
@@ -45,7 +46,8 @@ class App:
             "entry": Entry(self.frames["single"], width=40),
             "source_combobox": Combobox(width=37),
             "file_label": Label(self.frames["batch"], text=self.tr('file_label')),
-            "file_btn": Button(self.frames["batch"], text=self.tr('file_btn'), width=36),
+            "file_btn": Button(self.frames["batch"], text=self.tr('file_btn'),
+                               width=36, command=self.open_file),
             "file_list": Listbox(self.frames["batch"], width=37),
             "file_scroll": Scrollbar(self.frames["batch"]),
             "output": {
@@ -111,8 +113,8 @@ class App:
                command=lambda: PackageManager.open_package_details(
                    self.widgets['entry'].get()),
                width=77).grid(row=1, columnspan=2, padx=5, pady=5)
-        Button(text=self.tr('settings_btn'),
-               command=self.show_settings_window, width=79).grid(row=4, column=3, columnspan=3, pady=5)
+        Button(text=self.tr('settings_btn'), command=self.show_settings_window,
+               width=79).grid(row=4, column=3, columnspan=3, pady=5)
         Button(text=self.tr('about_btn'),
                command=self.show_about_window, width=79).grid(row=5, column=3, columnspan=3, pady=5)
 
@@ -140,6 +142,11 @@ class App:
         self.widgets["output"]["text"].see('end')
         self.widgets["output"]["text"].config(state="disabled")
 
+    def open_file(self):
+        file_names = askopenfilenames(title=self.tr("file_btn"))
+        for file in file_names:
+            self.widgets["file_list"].insert(END, file)
+
     def execute_command(self, command):
         """
         包装命令执行流程 / Wrapped command execution flow
@@ -156,13 +163,22 @@ class App:
         self.disable_buttons()
         self.widgets["buttons"][command].config(text=f"{self.tr('executing_text')}")
         self.widgets["output"]["text"].config(state="normal")
-        self.widgets["output"]["text"].delete(1.0, 'end')
+        self.show("\n\n")
         self.widgets["output"]["text"].config(state="disabled")
 
-        self.package_manager.execute(command,
-            self.widgets["entry"].get(),
-            self.sources[self.widgets["source_combobox"].get()]
-                if command in ["install", "upgrade"] else None)
+        package = self.widgets["entry"].get()
+        files = [self.widgets["file_list"].get(i)
+                 for i in range(self.widgets["file_list"].size())]
+
+        if package:
+            self.package_manager.execute(command=command, name=package,
+                source_url=self.sources[self.widgets["source_combobox"].get()]
+                    if command in ["install", "upgrade"] else None)
+        if files:
+            for file in files:
+                self.package_manager.execute(command=command, name=file, require=True,
+                    source_url=self.sources[self.widgets["source_combobox"].get()]
+                        if command in ["install", "upgrade"] else None)
 
         self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
         self.enable_buttons()
