@@ -21,6 +21,7 @@ DEFAULT_DATA = {
             "file_label": "To batch manage the package in files\nformat that complies " +
                           "with requirements.txt.",
             "file_btn": "Add Files",
+            "single_label": "Single Operations",
             "batch_label": "Batch Operations"
         },
         "中文": {
@@ -40,6 +41,7 @@ DEFAULT_DATA = {
             "file_label": "点击下方按钮，以格式符合\n" +
                           "requirements.txt 的文件批量管理包。",
             "file_btn": "添加文件",
+            "single_label": "单独操作",
             "batch_label": "批量操作"
         }
     },

@@ -32,19 +32,22 @@ class App:
 
         self.package_manager = PackageManager(self.ui_callback)
 
-        self.batch_frame = LabelFrame(self.main_window, text=self.tr("batch_label"))
+        self.frames = {
+            "single": LabelFrame(self.main_window, text=self.tr("single_label")),
+            "batch": LabelFrame(self.main_window, text=self.tr("batch_label"))
+        }
         self.widgets = {
             "buttons": {
                 "install": Button(text=self.tr('install_btn'), width=79),
                 "upgrade": Button(text=self.tr('upgrade_btn'), width=79),
                 "uninstall": Button(text=self.tr('uninstall_btn'), width=79)
             },
-            "entry": Entry(width=40),
+            "entry": Entry(self.frames["single"], width=40),
             "source_combobox": Combobox(width=37),
-            "file_label": Label(self.batch_frame, text=self.tr('file_label')),
-            "file_btn": Button(self.batch_frame, text=self.tr('file_btn'), width=36),
-            "file_list": Listbox(self.batch_frame, width=37),
-            "file_scroll": Scrollbar(self.batch_frame),
+            "file_label": Label(self.frames["batch"], text=self.tr('file_label')),
+            "file_btn": Button(self.frames["batch"], text=self.tr('file_btn'), width=36),
+            "file_list": Listbox(self.frames["batch"], width=37),
+            "file_scroll": Scrollbar(self.frames["batch"]),
             "output": {
                 "text": Text(width=80, height=10, font=("Consolas", 10)),
                 "scrollbar": Scrollbar()
@@ -83,11 +86,12 @@ class App:
         return self.languages[self.lang].get(key, key)
 
     def setup_widgets(self):
-        Label(text=self.tr('package_label')).grid(row=0, column=0, pady=5)
+        Label(self.frames["single"], text=self.tr('package_label')).grid(row=0, column=0, pady=5)
         self.widgets["entry"].grid(row=0, column=1, padx=5, pady=5, columnspan=2)
 
-        Label(text=self.tr('source_label')).grid(row=1, column=0, pady=5)
-        self.widgets["source_combobox"].grid(row=1, column=1, pady=5, columnspan=2)
+        self.frames["single"].grid(row=1, rowspan=2, columnspan=2, padx=5, pady=5)
+        Label(text=self.tr('source_label')).grid(row=0, column=0, pady=5)
+        self.widgets["source_combobox"].grid(row=0, column=1, pady=5)
         self.widgets["source_combobox"]['state'] = 'readonly'
         self.widgets["source_combobox"]['values'] = tuple(self.sources.keys())
         self.widgets["source_combobox"].set(self.settings['default_source'])
@@ -99,20 +103,20 @@ class App:
         self.widgets["buttons"]["uninstall"].config(
             command=lambda: Thread(target=self.execute_command, args=("uninstall",)).start())
 
-        self.widgets["buttons"]["install"].grid(row=2, columnspan=3, pady=5)
-        self.widgets["buttons"]["upgrade"].grid(row=3, columnspan=3, pady=5)
-        self.widgets["buttons"]["uninstall"].grid(row=4, columnspan=3, pady=5)
+        self.widgets["buttons"]["install"].grid(row=0, column=3, columnspan=3, pady=5)
+        self.widgets["buttons"]["upgrade"].grid(row=1, column=3, columnspan=3, pady=5)
+        self.widgets["buttons"]["uninstall"].grid(row=2, column=3, columnspan=3, pady=5)
 
-        Button(text=self.tr('details_btn'),
+        Button(self.frames["single"], text=self.tr('details_btn'),
                command=lambda: PackageManager.open_package_details(
                    self.widgets['entry'].get()),
-               width=79).grid(row=5, columnspan=3, pady=5)
+               width=77).grid(row=1, columnspan=2, padx=5, pady=5)
         Button(text=self.tr('settings_btn'),
-               command=self.show_settings_window, width=79).grid(row=6, columnspan=3, pady=5)
+               command=self.show_settings_window, width=79).grid(row=4, column=3, columnspan=3, pady=5)
         Button(text=self.tr('about_btn'),
-               command=self.show_about_window, width=79).grid(row=7, columnspan=3, pady=5)
+               command=self.show_about_window, width=79).grid(row=5, column=3, columnspan=3, pady=5)
 
-        self.batch_frame.grid(row=8, columnspan=3, pady=5)
+        self.frames["batch"].grid(row=3, rowspan=3, columnspan=3, padx=5, pady=5)
         self.widgets["file_list"].grid(row=0, column=0, rowspan=2, pady=5)
         self.widgets["file_scroll"].grid(row=0, column=1, rowspan=2,sticky='ns')
         self.widgets["file_scroll"].config(
@@ -123,8 +127,8 @@ class App:
         self.widgets["file_btn"].grid(row=1, column=2, padx=10)
 
         self.show(self.tr('initial_output'))
-        self.widgets["output"]["text"].grid(row=10, columnspan=2)
-        self.widgets["output"]["scrollbar"].grid(row=10, column=2, sticky='ns')
+        self.widgets["output"]["text"].grid(row=3, column=3, columnspan=2)
+        self.widgets["output"]["scrollbar"].grid(row=3, column=5, sticky='ns')
         self.widgets["output"]["scrollbar"].config(
             command=self.widgets["output"]["text"].yview)
         self.widgets["output"]["text"].config(
