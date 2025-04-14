@@ -5,7 +5,7 @@
 ![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
 ![Version](https://img.shields.io/badge/Version-0.7.0-lightgrey)
 
-[中文文档](README_CN.md)
+[中文](README_CN.md)
 
 A Tkinter-based GUI tool for Python package management with multi-source and batch operation support.
 
