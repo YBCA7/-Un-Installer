@@ -48,7 +48,7 @@ class App:
             "file_label": Label(self.frames["batch"], text=self.tr('file_label')),
             "file_btn": Button(self.frames["batch"], text=self.tr('file_btn'),
                                width=36, command=self.open_file),
-            "file_list": Listbox(self.frames["batch"], width=37),
+            "file_list": Listbox(self.frames["batch"], width=37, selectmode='multiple'),
             "file_scroll": Scrollbar(self.frames["batch"]),
             "output": {
                 "text": Text(width=80, height=10, font=("Consolas", 10)),
@@ -146,6 +146,7 @@ class App:
         file_names = askopenfilenames(title=self.tr("file_btn"))
         for file in file_names:
             self.widgets["file_list"].insert(END, file)
+            self.widgets["file_list"].selection_set(END)
 
     def execute_command(self, command):
         """
@@ -165,7 +166,7 @@ class App:
 
         package = self.widgets["entry"].get()
         files = [self.widgets["file_list"].get(i)
-                 for i in range(self.widgets["file_list"].size())]
+                 for i in self.widgets["file_list"].curselection()]
 
         if files or package:
             self.show("\n\n")
