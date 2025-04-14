@@ -5,7 +5,7 @@
 ![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
 ![Version](https://img.shields.io/badge/Version-0.7.0-lightgrey)
 
-[English Documentation](README.md)
+[English](README.md)
 
 基于 `Tkinter` 的 **Python包管理图形界面工具**，支持多镜像源选择和批量操作。
 
