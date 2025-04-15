@@ -82,7 +82,6 @@ class App:
         elif action == 'show_error':
             self.show(args[0])
             showerror(self.tr('error_title'), args[0])
-            self.enable_buttons()
 
     def tr(self, key):
         return self.languages[self.lang].get(key, key)
@@ -170,18 +169,21 @@ class App:
 
         if files or package:
             self.show("\n\n")
-        if package:
-            self.package_manager.execute(command=command, name=package,
-                source_url=self.sources[self.widgets["source_combobox"].get()]
-                    if command in ["install", "upgrade"] else None)
-        if files:
-            for file in files:
-                self.package_manager.execute(command=command, name=file, require=True,
+        try:
+            if package:
+                self.package_manager.execute(command=command, name=package,
                     source_url=self.sources[self.widgets["source_combobox"].get()]
                         if command in ["install", "upgrade"] else None)
-
-        self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
-        self.enable_buttons()
+            if files:
+                for file in files:
+                    self.package_manager.execute(command=command, name=file, require=True,
+                        source_url=self.sources[self.widgets["source_combobox"].get()]
+                            if command in ["install", "upgrade"] else None)
+        except Exception as e:
+        	showerror(self.tr('error_title'), str(e))
+        finally:
+            self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
+            self.enable_buttons()
 
     def disable_buttons(self):
         for button in self.widgets["buttons"].values():
