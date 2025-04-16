@@ -78,10 +78,11 @@ class App:
         """
 
         if action == 'show_output':
-            self.show(args[0])
+            self.main_window.after(0, lambda: self.show(args[0]))
         elif action == 'show_error':
-            self.show(args[0])
-            showerror(self.tr('error_title'), args[0])
+            self.main_window.after(0, lambda: self.show(args[0]))
+            self.main_window.after(0, lambda: 
+                showerror(self.tr('error_title'), args[0]))
 
     def tr(self, key):
         return self.languages[self.lang].get(key, key)
@@ -180,10 +181,11 @@ class App:
                         source_url=self.sources[self.widgets["source_combobox"].get()]
                             if command in ["install", "upgrade"] else None)
         except Exception as e:
-        	showerror(self.tr('error_title'), str(e))
+        	self.main_window.after(0, lambda: showerror("Error", str(e)))
         finally:
-            self.widgets["buttons"][command].config(text=self.tr(command + '_btn'))
-            self.enable_buttons()
+            self.main_window.after(0, lambda:
+            	self.widgets["buttons"][command].config(text=self.tr(command + '_btn')))
+            self.main_window.after(0, self.enable_buttons)
 
     def disable_buttons(self):
         for button in self.widgets["buttons"].values():
