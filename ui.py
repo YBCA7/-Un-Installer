@@ -81,7 +81,7 @@ class App:
             self.main_window.after(0, lambda: self.show(args[0]))
         elif action == 'show_error':
             self.main_window.after(0, lambda: self.show(args[0]))
-            self.main_window.after(0, lambda: 
+            self.main_window.after(0, lambda:
                 showerror(self.tr('error_title'), args[0]))
 
     def tr(self, key):
