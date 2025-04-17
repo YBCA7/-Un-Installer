@@ -5,104 +5,108 @@ from threading import Thread
 
 
 class PackageManager:
-    """
-    Python包管理命令执行核心
-    Core executor for Python package management commands
+	"""
+	Python包管理命令执行核心
+	Core executor for Python package management commands
 
-    职责：
-    - 执行pip安装/升级/卸载操作
-    - 实时捕获并转发命令输出
-    - 提供PyPI包详情页跳转
-    ---
-    Responsibilities:
-    - Execute pip install/upgrade/uninstall operations
-    - Capture and forward command output in real-time
-    - Provide PyPI package details page redirection
-    """
+	职责：
+	- 执行pip安装/升级/卸载操作
+	- 实时捕获并转发命令输出
+	- 提供PyPI包详情页跳转
+	---
+	Responsibilities:
+	- Execute pip install/upgrade/uninstall operations
+	- Capture and forward command output in real-time
+	- Provide PyPI package details page redirection
+	"""
 
-    def __init__(self, ui_callback):
-        self.pip_command_prefix = [executable, "-m", "pip"]
-        self.ui_callback = ui_callback
-        self.process = None
+	def __init__(self, ui_callback):
+		self.pip_command_prefix = [executable, "-m", "pip"]
+		self.ui_callback = ui_callback
+		self.process = None
 
-    def terminate(self):
-        """
-        终止当前子进程 / Terminate the current child process
-        """
+	def terminate(self):
+		"""
+		终止当前子进程 / Terminate the current child process
+		"""
 
-        if self.process is not None:
-            self.process.terminate()
-            self.process.wait()
-            self.process = None
+		if self.process is not None:
+			self.process.terminate()
+			self.process.wait()
+			self.process = None
 
-    def execute(self, command, package_name, source_url=None):
-        """
-        执行pip命令主入口 / Main entry for pip command execution
+	def execute(self, command, name, require=False, source_url=None):
+		"""
+		执行pip命令主入口 / Main entry for pip command execution
 
-        Args:
-            command (str): 操作类型 ['install'|'upgrade'|'uninstall'] /
-                          Command type ['install'|'upgrade'|'uninstall']
-            package_name (str): 目标包名称 / Target package name
-            source_url (str, optional): 镜像源URL / Mirror source URL
+		Args:
+			command (str): 操作类型 ['install'|'upgrade'|'uninstall'] /
+						  Command type ['install'|'upgrade'|'uninstall']
+			name (str): 目标包或文件名称 / Target package or file name
+			require (bool, optional): 是否从文件管理包 / Manage from a file or not
+			source_url (str, optional): 镜像源URL / Mirror source URL
 
-        Raises:
-            ValueError: 当传入无效命令类型时 / When invalid command type is passed
-        """
+		Raises:
+			ValueError: 当传入无效命令类型时 / When invalid command type is passed
+		"""
 
-        try:
-            if command == "install":
-                full_command = self.pip_command_prefix + [
-                    "install", "-i", source_url, package_name
-                ]
-            elif command == "upgrade":
-                full_command = self.pip_command_prefix + [
-                    "install", "--upgrade", package_name, "-i", source_url
-                ]
-            elif command == "uninstall":
-                full_command = self.pip_command_prefix + [
-                    "uninstall", package_name, "-y"
-                ]
-            else:
-                raise ValueError("Invalid command")
+		try:
+			if command == "install":
+				full_command = self.pip_command_prefix + [
+					"install", name, "-i", source_url
+				]
+			elif command == "upgrade":
+				full_command = self.pip_command_prefix + [
+					"install", name, "--upgrade", "-i", source_url
+				]
+			elif command == "uninstall":
+				full_command = self.pip_command_prefix + [
+					"uninstall", name, "-y"
+				]
+			else:
+				raise ValueError("Invalid command")
 
-            self.process = Popen(full_command, stdout=PIPE, stderr=PIPE,
-                                 text=True, bufsize=1, universal_newlines=True)
-            Thread(target=self._catch_output, args=(self.process,), daemon=True).start()
-            self.process.wait()
+			if require:
+				full_command.insert(4, "-r")
 
-            return_code = self.process.returncode
-            if return_code != 0:
-                err = self.process.stderr.read()
-                if err:
-                    self.ui_callback('show_error', err)
-        finally:
-            if self.process:
-                self.process.stdout.close()
-                self.process.stderr.close()
-            self.process = None
+			self.process = Popen(full_command, stdout=PIPE, stderr=PIPE,
+								 text=True, bufsize=1, universal_newlines=True)
+			Thread(target=self._catch_output, args=(self.process,), daemon=True).start()
+			self.process.wait()
 
-    def _catch_output(self, process):
-        """
-        持续捕获子进程输出 / Continuously capture subprocess output
+			return_code = self.process.returncode
+			if return_code != 0:
+				err = self.process.stderr.read()
+				if err:
+					self.ui_callback('show_error', err)
+		finally:
+			if self.process:
+				self.process.stdout.close()
+				self.process.stderr.close()
+			self.process = None
 
-        实现逻辑 / Implementation:
-        - 通过轮询方式实时读取stdout
-        - 进程结束时自动退出循环
-        - 通过回调转发输出内容
-        ---
-        - Read stdout in real-time via polling
-        - Auto-exit loop when process ends
-        - Forward output via callback
-        """
+	def _catch_output(self, process):
+		"""
+		持续捕获子进程输出 / Continuously capture subprocess output
 
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                self.ui_callback('show_output', output)
-        process.stdout.close()
+		实现逻辑 / Implementation:
+		- 通过轮询方式实时读取stdout
+		- 进程结束时自动退出循环
+		- 通过回调转发输出内容
+		---
+		- Read stdout in real-time via polling
+		- Auto-exit loop when process ends
+		- Forward output via callback
+		"""
 
-    @staticmethod
-    def open_package_details(package_name):
-        webbrowser.open(f"https://pypi.org/project/{package_name}/")
+		while True:
+			output = process.stdout.readline()
+			if output == '' and process.poll() is not None:
+				break
+			if output:
+				self.ui_callback('show_output', output)
+		process.stdout.close()
+
+	@staticmethod
+	def open_package_details(package_name):
+		webbrowser.open(f"https://pypi.org/project/{package_name}/")

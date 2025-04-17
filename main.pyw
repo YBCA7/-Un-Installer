@@ -5,8 +5,8 @@ from ui import App
 
 
 if __name__ == "__main__":
-    if not exists('data.json'):
-        dump_default_data()
-    main_window = Tk()
-    App(main_window)
-    main_window.mainloop()
+	if not exists('data.json'):
+		dump_default_data()
+	main_window = Tk()
+	App(main_window)
+	main_window.mainloop()
