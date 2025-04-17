@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green)
 ![GUI](https://img.shields.io/badge/GUI-Tkinter-orange)
-![Version](https://img.shields.io/badge/Version-0.7.0-lightgrey)
+![Version](https://img.shields.io/badge/Version-1.0.0-lightgrey)
 
 [中文](README_CN.md)
 
