@@ -49,7 +49,8 @@ class App:
 			"file_btn": Button(self.frames["batch"], text=self.tr('file_btn'),
 							   width=36, command=self.open_file),
 			"file_list": Listbox(self.frames["batch"], width=37, selectmode='multiple'),
-			"file_scroll": Scrollbar(self.frames["batch"]),
+			"file_x_scroll": Scrollbar(self.frames["batch"], orient="horizontal"),
+			"file_y_scroll": Scrollbar(self.frames["batch"]),
 			"output": {
 				"text": Text(width=80, height=10, font=("Consolas", 10)),
 				"scrollbar": Scrollbar()
@@ -119,12 +120,16 @@ class App:
 			   command=self.show_about_window, width=79).grid(row=5, column=3, columnspan=3, pady=5)
 
 		self.frames["batch"].grid(row=3, rowspan=3, columnspan=3, padx=5, pady=5)
-		self.widgets["file_list"].grid(row=0, column=0, rowspan=2, pady=5)
-		self.widgets["file_scroll"].grid(row=0, column=1, rowspan=2,sticky='ns')
-		self.widgets["file_scroll"].config(
+		self.widgets["file_list"].grid(row=0, column=0, rowspan=2)
+		self.widgets["file_x_scroll"].grid(row=2, column=0, sticky='ew')
+		self.widgets["file_x_scroll"].config(
+			command=self.widgets["file_list"].xview)
+		self.widgets["file_y_scroll"].grid(row=0, column=1, rowspan=2, sticky='ns')
+		self.widgets["file_y_scroll"].config(
 			command=self.widgets["file_list"].yview)
 		self.widgets["file_list"].config(
-			yscrollcommand=self.widgets["file_scroll"].set)
+			xscrollcommand=self.widgets["file_x_scroll"].set,
+			yscrollcommand=self.widgets["file_y_scroll"].set)
 		self.widgets["file_label"].grid(row=0, column=2, padx=10)
 		self.widgets["file_btn"].grid(row=1, column=2, padx=10)
 
