@@ -34,8 +34,10 @@ class App:
 		self.package_manager = PackageManager(self.ui_callback)
 
 		self.frames = {
-			"single": LabelFrame(self.main_window, text=self.tr("single_label")),
-			"batch": LabelFrame(self.main_window, text=self.tr("batch_label"))
+			"single": LabelFrame(self.main_window,
+				text=self.tr("single_label"), borderwidth=10),
+			"batch": LabelFrame(self.main_window,
+				text=self.tr("batch_label"), borderwidth=10)
 		}
 		self.widgets = {
 			"buttons": {
